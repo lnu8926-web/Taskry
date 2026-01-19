@@ -1,0 +1,729 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-main-100: #aee2eb;
+  --color-main-200: #87bac3;
+  --color-main-300: #6a929a;
+  --color-main-400: #4d6d72;
+  --color-main-500: #33494d;
+  --color-main-600: #1b282b;
+  --color-main-700: #0a1214;
+
+  --color-gray-100: #ebe9e9;
+  --color-gray-200: #c5c0c1;
+  --color-gray-300: #a2989b;
+  --color-gray-400: #7f7376;
+  --color-gray-500: #5a5153;
+  --color-gray-600: #373133;
+  --color-gray-700: #171415;
+
+  --color-yellow-100: #fbbf24;
+  --color-red-100: #ef4444;
+  --color-blue-100: #60a5fa;
+  --color-green-100: #57bc71;
+
+  --color-dark-title: var(--dark-title);
+  --color-dark-body: var(--dark-body);
+  --color-dark-description: var(--dark-description);
+  --color-dark-border: var(--dark-border);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  --dark-title: #171415;
+  --dark-body: #171415;
+  --dark-description: #5a5153;
+  --dark-border: #c5c0c1;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+
+  --dark-title: #f5f5f5;
+  --dark-body: #171415;
+  --dark-description: #c5c0c1;
+  --dark-border: #373133;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ==========================================================================
+   React Calendar (react-calendar)
+   ========================================================================== */
+
+/* react-calendar 전체를 투명하게 하고, 외곽은 portal wrapper가 담당 */
+.react-calendar-custom {
+  border: none !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* 네비게이션 */
+.react-calendar-custom .react-calendar__navigation {
+  background: transparent !important;
+  margin-bottom: 4px !important;
+  height: 44px;
+}
+
+.react-calendar-custom .react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--foreground);
+  transition: background-color 0.2s;
+}
+
+.react-calendar-custom .react-calendar__navigation button:enabled:hover,
+.react-calendar-custom .react-calendar__navigation button:enabled:focus {
+  background-color: var(--accent);
+}
+
+/* 요일 헤더 */
+.react-calendar-custom .react-calendar__month-view__weekdays {
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  padding: 8px 0;
+  background: transparent !important;
+}
+
+.react-calendar-custom .react-calendar__month-view__weekdays__weekday {
+  padding: 0.5em;
+}
+
+/* 일요일/토요일 헤더 색 */
+.react-calendar-custom
+  .react-calendar__month-view__weekdays__weekday:first-child
+  abbr {
+  color: var(--color-red-100);
+}
+
+.react-calendar-custom
+  .react-calendar__month-view__weekdays__weekday:last-child
+  abbr {
+  color: var(--color-blue-100);
+}
+
+/* 날짜 셀 */
+.react-calendar-custom .react-calendar__tile {
+  max-width: 100%;
+  padding: 10px 6px;
+  background: transparent !important;
+  text-align: center;
+  line-height: 16px;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  transition: all 0.2s ease;
+}
+
+/* 날짜 hover */
+.react-calendar-custom .react-calendar__tile:enabled:hover,
+.react-calendar-custom .react-calendar__tile:enabled:focus {
+  background-color: var(--color-main-100);
+  color: var(--color-main-400);
+  border-radius: 8px;
+  transform: scale(1.08);
+  font-weight: 600;
+}
+
+.dark .react-calendar-custom .react-calendar__tile:enabled:hover,
+.dark .react-calendar-custom .react-calendar__tile:enabled:focus {
+  background-color: var(--color-main-500);
+  color: var(--color-main-100);
+}
+
+/* 일/토 */
+.react-calendar-custom
+  .react-calendar__month-view__days__day:nth-child(7n + 1):not(
+    .react-calendar__month-view__days__day--neighboringMonth
+  )
+  abbr {
+  color: var(--color-red-100);
+}
+
+.react-calendar-custom
+  .react-calendar__month-view__days__day:nth-child(7n):not(
+    .react-calendar__month-view__days__day--neighboringMonth
+  )
+  abbr {
+  color: var(--color-blue-100);
+}
+
+/* 오늘 */
+.react-calendar-custom .react-calendar__tile--now {
+  background-color: var(--color-main-100) !important;
+  border-radius: 8px;
+  font-weight: 700;
+  color: var(--color-main-500);
+}
+
+.dark .react-calendar-custom .react-calendar__tile--now {
+  background-color: var(--color-main-500) !important;
+  color: var(--color-main-100);
+}
+
+.react-calendar-custom .react-calendar__tile--now:enabled:hover,
+.react-calendar-custom .react-calendar__tile--now:enabled:focus {
+  background-color: var(--color-main-200);
+  transform: scale(1.1);
+}
+
+.dark .react-calendar-custom .react-calendar__tile--now:enabled:hover,
+.dark .react-calendar-custom .react-calendar__tile--now:enabled:focus {
+  background-color: var(--color-main-400);
+}
+
+/* 선택된 날짜 */
+.react-calendar-custom .react-calendar__tile--active {
+  background-color: var(--color-main-400) !important;
+  color: #fff !important;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.dark .react-calendar-custom .react-calendar__tile--active {
+  background-color: var(--color-main-300) !important;
+}
+
+.react-calendar-custom .react-calendar__tile--active:enabled:hover,
+.react-calendar-custom .react-calendar__tile--active:enabled:focus {
+  background-color: var(--color-main-500);
+  transform: scale(1.1);
+}
+
+.dark .react-calendar-custom .react-calendar__tile--active:enabled:hover,
+.dark .react-calendar-custom .react-calendar__tile--active:enabled:focus {
+  background-color: var(--color-main-400);
+}
+
+/* 이웃 월 */
+.react-calendar-custom
+  .react-calendar__month-view__days__day--neighboringMonth {
+  color: var(--muted-foreground);
+  background: transparent !important;
+}
+
+/* 비활성 날짜 */
+.react-calendar-custom .react-calendar__tile:disabled {
+  background: transparent !important;
+  color: var(--muted-foreground);
+}
+
+/* ==========================================================================
+   React Big Calendar - 주간/일간 뷰 시간 그리드
+   ========================================================================== */
+
+/* 1. 시간 헤더 - 컴포넌트에서 스타일 처리, CSS는 최소화 */
+.rbc-time-header-gutter {
+  min-width: 70px !important;
+  max-width: 70px !important;
+  padding: 0 !important; /* TimeColumnHeader 컴포넌트가 padding 처리 */
+}
+
+/* 2. 시간 슬롯 그룹 (1시간 = 60px) */
+.rbc-timeslot-group {
+  min-height: 60px !important;
+  max-height: 60px !important;
+  height: 60px !important;
+  flex: none !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+/* 3. 개별 시간 슬롯 (15분 = 15px) */
+.rbc-time-slot {
+  min-height: 15px !important;
+  max-height: 15px !important;
+  height: 15px !important;
+  flex: 1 1 15px !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark .rbc-time-slot {
+  border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* 4. 시간 라벨 (08:00, 09:00...) */
+.rbc-label {
+  height: 60px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  padding-right: 8px !important;
+  color: var(--muted-foreground) !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+}
+
+/* 5. 날짜 컬럼 슬롯 */
+.rbc-day-slot .rbc-timeslot-group {
+  min-height: 60px !important;
+  max-height: 60px !important;
+  height: 60px !important;
+}
+
+.rbc-day-slot .rbc-time-slot {
+  min-height: 15px !important;
+  max-height: 15px !important;
+  height: 15px !important;
+}
+
+/* 6. 시간 컬럼 너비 */
+.rbc-time-column {
+  min-width: 70px !important;
+}
+
+/* 7. 전체 컨테이너 */
+.rbc-time-view {
+  border: 1px solid var(--border) !important;
+}
+
+.rbc-time-header {
+  border-bottom: none !important; /* 개별 헤더가 border 처리 */
+}
+
+.rbc-time-content {
+  border-top: 1px solid var(--border) !important;
+}
+/* ==========================================================================
+   React Big Calendar (react-big-calendar)
+   ========================================================================== */
+
+/* 공통 */
+.rbc-calendar {
+  background-color: var(--background);
+  padding: 16px;
+}
+
+.rbc-header {
+  border-color: var(--border);
+  background-color: var(--background);
+  color: var(--foreground);
+  border-bottom: 1px solid var(--border);
+  border-right: none;
+}
+
+.rbc-header + .rbc-header {
+  border-left: 1px solid var(--border);
+}
+
+/* 일요일/토요일 헤더 - 라이트/다크 공통 */
+.rbc-header:first-child {
+  color: var(--color-red-100);
+}
+
+.rbc-header:last-child {
+  color: var(--color-blue-100);
+}
+
+.rbc-day-bg {
+  border-color: var(--border);
+  transition: background-color 0.2s;
+}
+
+.rbc-event {
+  border: none;
+}
+
+/* 툴바 버튼 */
+.rbc-toolbar button {
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+  background-color: var(--background);
+  transition: all 0.2s;
+}
+
+.rbc-toolbar button:hover {
+  background-color: var(--color-main-200);
+  border-color: var(--color-main-200);
+  color: white;
+}
+
+.dark .rbc-toolbar button:hover {
+  background-color: var(--color-main-300);
+  border-color: var(--color-main-300);
+}
+
+.rbc-toolbar button:active,
+.rbc-toolbar button.rbc-active {
+  background-color: var(--color-main-300);
+  border-color: var(--color-main-300);
+  color: white;
+}
+
+.dark .rbc-toolbar button:active,
+.dark .rbc-toolbar button.rbc-active {
+  background-color: var(--color-main-400);
+  border-color: var(--color-main-400);
+}
+
+/* 오늘 날짜 - border 제거 */
+.rbc-today {
+  background-color: var(--color-main-100);
+  opacity: 0.8;
+}
+
+.dark .rbc-today {
+  background-color: var(--color-main-500);
+  opacity: 0.3;
+}
+
+.rbc-button-link {
+  color: var(--color-main-400);
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.dark .rbc-button-link {
+  color: var(--color-main-200);
+}
+
+/* 이전/다음 달 날짜 */
+.rbc-off-range-bg {
+  background-color: var(--muted);
+}
+
+.dark .rbc-off-range-bg {
+  background-color: var(--card);
+}
+
+/* 날짜 셀 호버 */
+.rbc-day-bg:hover {
+  background-color: var(--color-main-100);
+}
+
+.dark .rbc-day-bg:hover {
+  background-color: var(--color-main-600);
+}
+
+.rbc-off-range-bg:hover {
+  background-color: var(--accent);
+}
+
+.dark .rbc-off-range-bg:hover {
+  background-color: var(--secondary);
+}
+
+/* 일요일/토요일 날짜 - 라이트/다크 공통 */
+.rbc-date-cell:nth-child(7n + 1),
+.rbc-date-cell:nth-child(7n + 1) a,
+.rbc-date-cell:nth-child(7n + 1) .rbc-button-link {
+  color: var(--color-red-100);
+}
+
+.rbc-date-cell:nth-child(7n),
+.rbc-date-cell:nth-child(7n) a,
+.rbc-date-cell:nth-child(7n) .rbc-button-link {
+  color: var(--color-blue-100);
+}
+
+/* 드래그 선택 영역 */
+.rbc-slot-selection {
+  background-color: var(--color-main-200);
+  opacity: 0.5;
+}
+
+.dark .rbc-slot-selection {
+  background-color: var(--color-main-300);
+  opacity: 0.6;
+}
+
+/* 월뷰 */
+.rbc-month-view {
+  background-color: var(--background);
+}
+
+.rbc-month-row {
+  border-color: var(--border);
+}
+
+/* 날짜 셀 position */
+.rbc-day-bg {
+  position: relative;
+}
+
+/* 주뷰, 일뷰 */
+.rbc-time-view {
+  background-color: var(--background);
+  border-color: var(--border);
+}
+
+.rbc-time-header {
+  background-color: var(--background);
+}
+
+.rbc-time-header-content {
+  border-color: var(--border);
+}
+
+.rbc-time-content {
+  border-color: var(--border);
+}
+
+.rbc-day-slot {
+  border-color: var(--border);
+}
+
+/* 시간 슬롯 */
+.rbc-time-slot {
+  border-color: var(--border);
+}
+
+.rbc-timeslot-group {
+  border-color: var(--border);
+}
+
+/* 시간 라벨 */
+.rbc-label {
+  color: var(--muted-foreground);
+}
+
+/* 일정뷰 */
+.rbc-agenda-view {
+  background-color: var(--background);
+}
+
+.rbc-agenda-table {
+  border-color: var(--border);
+}
+
+.rbc-agenda-date-cell,
+.rbc-agenda-time-cell,
+.rbc-agenda-event-cell {
+  border-color: var(--border);
+  color: var(--foreground);
+}
+
+/* 스크롤바 숨김 유틸리티 */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==========================================================================
+   Modal & Task Form 최적화 CSS
+   ========================================================================== */
+
+/* 모달 스크롤 컨테이너 */
+.modal-scroll-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-gray-300) transparent;
+}
+
+.modal-scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-scroll-container::-webkit-scrollbar-thumb {
+  background-color: var(--color-gray-300);
+  border-radius: 3px;
+}
+
+.dark .modal-scroll-container::-webkit-scrollbar-thumb {
+  background-color: var(--color-gray-600);
+}
+
+.modal-scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-gray-400);
+}
+
+.dark .modal-scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-gray-500);
+}
+
+/* Task Form 레이아웃 */
+.task-form-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: calc(100vh - 120px);
+}
+
+.task-form-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+  overscroll-behavior: contain;
+}
+
+.task-form-footer {
+  flex-shrink: 0;
+  background: inherit;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+  margin-top: auto;
+}
+
+/* 입력 필드 포커스 스타일 통일 */
+.input-focus-style {
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-focus-style:focus {
+  outline: none;
+  border-color: var(--color-main-400);
+  box-shadow: 0 0 0 3px rgba(106, 146, 154, 0.15);
+}
+
+.dark .input-focus-style:focus {
+  border-color: var(--color-main-300);
+  box-shadow: 0 0 0 3px rgba(106, 146, 154, 0.25);
+}
+
+/* ==========================================================================
+   캘린더 포탈 컨테이너 (wrapper)
+   ========================================================================== */
+
+.calendar-portal {
+  position: fixed;
+  z-index: 9999;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+}
+
+.calendar-portal .react-calendar-custom {
+  animation: calendar-fade-in 0.15s ease-out;
+}
+
+@keyframes calendar-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
