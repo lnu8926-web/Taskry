@@ -73,14 +73,11 @@ export default function Sidebar({ className }: SidebarProps) {
         `}
       >
         {/* 로고 영역 */}
-        <div 
+        <div
           className="p-4 border-b border-gray-200"
           style={{ backgroundColor: MIST.LIGHT }}
         >
-          <h1 
-            className="text-xl font-bold"
-            style={{ color: MIST.DARKEST }}
-          >
+          <h1 className="text-xl font-bold" style={{ color: MIST.DARKEST }}>
             Taskry
           </h1>
         </div>
@@ -88,15 +85,15 @@ export default function Sidebar({ className }: SidebarProps) {
         {/* 검색 영역 */}
         <div className="p-4">
           <div className="relative">
-            <Search 
-              className="absolute left-3 top-2.5 h-4 w-4" 
+            <Search
+              className="absolute left-3 top-2.5 h-4 w-4"
               style={{ color: MIST.MEDIUM }}
             />
             <input
               type="text"
               placeholder="Search..."
               className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:bg-white transition-colors"
-              style={{ 
+              style={{
                 ["--tw-ring-color" as string]: MIST.DEFAULT,
               }}
             />
@@ -132,7 +129,7 @@ export default function Sidebar({ className }: SidebarProps) {
           />
 
           <div className="pt-4 mt-4 border-t border-gray-200">
-            <h3 
+            <h3
               className="text-xs font-semibold uppercase tracking-wider"
               style={{ color: MIST.MEDIUM }}
             >
@@ -154,10 +151,12 @@ export default function Sidebar({ className }: SidebarProps) {
                 name="Q4 Planning"
                 onClick={closeSidebar}
               />
-              <button 
-                className="flex items-center w-full px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
-              >
-                <Plus size={16} className="mr-2" style={{ color: MIST.MEDIUM }} />
+              <button className="flex items-center w-full px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors">
+                <Plus
+                  size={16}
+                  className="mr-2"
+                  style={{ color: MIST.MEDIUM }}
+                />
                 Add Project
               </button>
             </div>
@@ -206,14 +205,16 @@ function SidebarItem({
     <button
       onClick={onClick}
       className={`flex items-center w-full px-2 py-2 text-sm rounded-md transition-colors ${
-        active
-          ? "font-medium"
-          : "text-gray-600 hover:bg-gray-100"
+        active ? "font-medium" : "text-gray-600 hover:bg-gray-100"
       }`}
-      style={active ? { 
-        backgroundColor: MIST.LIGHT, 
-        color: MIST.DARKEST 
-      } : undefined}
+      style={
+        active
+          ? {
+              backgroundColor: MIST.LIGHT,
+              color: MIST.DARKEST,
+            }
+          : undefined
+      }
     >
       <span className="mr-3">{icon}</span>
       {label}
@@ -233,7 +234,7 @@ function ProjectItem({ color, name, onClick }: ProjectItemProps) {
       onClick={onClick}
       className="flex items-center w-full px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
     >
-      <span 
+      <span
         className="h-2 w-2 rounded-full mr-3"
         style={{ backgroundColor: color }}
       />
