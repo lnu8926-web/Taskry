@@ -40,7 +40,6 @@ export default function CalendarHeader({
   onAddTask,
   onProjectInfoClick,
 }: CalendarHeaderProps) {
-  console.log(projectName);
   // 뷰별 날짜 포맷
   const getDateFormat = () => {
     switch (currentView) {

@@ -17,7 +17,7 @@ export default function ProjectBoardHeader() {
       <SectionHeader
         title="프로젝트 목록"
         description="Taskry에서 프로젝트를 생성하고 관리합니다."
-        className="!mb-0"
+        className="mb-0!"
       />
       <div className="p-1 content-center">
         <Button

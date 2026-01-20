@@ -63,15 +63,6 @@ const KanbanBoard = ({
   const projectStartedAt = project?.started_at;
   const projectEndedAt = project?.ended_at;
 
-  console.log("KanbanBoard - Project Info:", {
-    project,
-    projectName,
-    projectStartedAt,
-    projectEndedAt,
-    boardId,
-    projectId,
-  });
-
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [showTaskAddModal, setShowTaskAddModal] = useState(false);
   const [activeTask, setActiveTask] = useState<Task | null>(null);

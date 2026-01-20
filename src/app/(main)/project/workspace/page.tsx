@@ -96,7 +96,6 @@ export default function ProjectPage() {
         let boardId = boards[0]?.id;
 
         if (!boardId) {
-          console.log("⚠️ 칸반보드가 없어서 새로 생성합니다.");
           const newBoard = createBoard({
             name: "기본 보드",
             project_id: projectId,

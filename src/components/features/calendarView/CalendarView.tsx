@@ -45,7 +45,7 @@ interface CalendarViewProps {
     ended_at?: string;
   } | null;
   onCreateTask?: (
-    taskData: Omit<Task, "id" | "created_at" | "updated_at">
+    taskData: Omit<Task, "id" | "created_at" | "updated_at">,
   ) => void;
   onUpdateTask?: (taskId: string, updates: Partial<Task>) => void;
   onDeleteTask?: (taskId: string) => void;
@@ -70,15 +70,6 @@ export default function CalendarView({
   const projectName = project?.project_name || "이름 없는 프로젝트";
   const projectStartedAt = project?.started_at;
   const projectEndedAt = project?.ended_at;
-
-  console.log("CalendarView - Project Info:", {
-    project,
-    projectName,
-    projectStartedAt,
-    projectEndedAt,
-    boardId,
-    projectId,
-  });
 
   // 상태 관리
   const {
@@ -202,7 +193,7 @@ export default function CalendarView({
     (newFilter: Partial<CalendarFilter>) => {
       setFilter((prev) => ({ ...prev, ...newFilter }));
     },
-    []
+    [],
   );
 
   /**
@@ -210,16 +201,8 @@ export default function CalendarView({
    */
   const handleNavigate = useCallback(
     (newDate: Date) => {
-      console.log(
-        "handleNavigate:",
-        newDate,
-        currentView,
-        projectStartedAt,
-        projectEndedAt
-      );
       // 프로젝트 기간이 설정되지 않은 경우 제한 없음
       if (!projectStartedAt && !projectEndedAt) {
-        console.log("프로젝트 기간 미설정 - 날짜 이동 허용");
         setCurrentDate(newDate);
         return;
       }
@@ -233,16 +216,10 @@ export default function CalendarView({
         const checkDate = new Date(
           newDate.getFullYear(),
           newDate.getMonth(),
-          1
+          1,
         );
         const minMonth = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
         const maxMonth = new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
-
-        console.log("월 뷰 - 날짜 이동 체크:", {
-          minDate,
-          maxDate,
-          newDate,
-        });
 
         if (checkDate < minMonth || checkDate > maxMonth) {
           showToast("프로젝트 기간을 확인하세요.", "warning");
@@ -257,7 +234,7 @@ export default function CalendarView({
       }
       setCurrentDate(newDate);
     },
-    [projectStartedAt, projectEndedAt, currentView, setCurrentDate]
+    [projectStartedAt, projectEndedAt, currentView, setCurrentDate],
   );
 
   /**
@@ -270,7 +247,7 @@ export default function CalendarView({
       setSelectedDates(null);
       // onTaskCreated 호출 제거 - handleCreateTask에서 이미 로컬 상태 업데이트함
     },
-    [onCreateTask, setShowTaskAddModal, setSelectedDates]
+    [onCreateTask, setShowTaskAddModal, setSelectedDates],
   );
 
   return (
@@ -335,7 +312,7 @@ export default function CalendarView({
                   startDate: Date,
                   endDate: Date,
                   startHour?: number,
-                  endHour?: number
+                  endHour?: number,
                 ) => {
                   // 프로젝트 종료 체크
                   if (projectEndedAt) {
@@ -440,7 +417,7 @@ export default function CalendarView({
                 onSelectSlot={(
                   date: Date,
                   startHour?: number,
-                  endHour?: number
+                  endHour?: number,
                 ) => {
                   // 프로젝트 종료 체크
                   if (projectEndedAt) {

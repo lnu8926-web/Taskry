@@ -268,9 +268,6 @@ export default function TaskDetail({
         const otherTimeField =
           field === "start_time" ? newData.end_time : newData.start_time;
         if (!otherTimeField || !otherTimeField.trim()) {
-          console.log(
-            `⏰ TaskDetail 시간 모두 삭제됨, use_time을 false로 설정`,
-          );
           newData.use_time = false;
         }
       }
