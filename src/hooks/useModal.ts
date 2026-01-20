@@ -6,7 +6,7 @@ interface ModalControls {
     type: "delete" | "success" | "error" | "progress" | "deleteSuccess",
     title?: string,
     description?: string,
-    warning?: string
+    warning?: string,
   ) => void;
   closeModal: () => void;
   modalProps: ModalProps;
@@ -22,14 +22,19 @@ export const useModal = (): ModalControls => {
   const [warning, setWarning] = useState<string | undefined>(undefined);
 
   const openModal = useCallback(
-    (type: any, title: any, description: any, warning: any) => {
+    (
+      type: "delete" | "success" | "error" | "progress" | "deleteSuccess",
+      title: string | undefined,
+      description: string | undefined,
+      warning: string | undefined,
+    ) => {
       setType(type);
       setTitle(title);
       setDescription(description);
       setIsOpen(true);
       setWarning(warning);
     },
-    []
+    [],
   );
 
   const closeModal = useCallback(() => {

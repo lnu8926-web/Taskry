@@ -151,7 +151,7 @@ interface IconProps extends React.HTMLAttributes<HTMLDivElement> {
   type?: IconTypeKeys;
   size?: number;
   color?: string;
-  props?: any;
+  props?: React.SVGProps<SVGSVGElement>;
   className?: string;
 }
 
@@ -162,7 +162,7 @@ const Icon = ({ type, size = 24, color, className = "" }: IconProps) => {
   // 아이콘이 정의되지 않은 경우 기본 아이콘 반환
   if (!IconComponent) {
     console.warn(
-      `Icon "${iconType}" not found in ICON_MAP. Using default "x" icon.`
+      `Icon "${iconType}" not found in ICON_MAP. Using default "x" icon.`,
     );
     return <TbX size={size} color={color} className={className} />;
   }

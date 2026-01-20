@@ -27,7 +27,7 @@ export const getTaskStatusColor = (status: TaskStatus) => {
 }; // Task 우선순위별 색상 정의
 export const getTaskPriorityColor = (
   priority: TaskPriority,
-  isDark = false
+  isDark = false,
 ) => {
   const colors = {
     high: {
@@ -134,7 +134,7 @@ export const isTaskOverdue = (task: {
 };
 
 // Task 완료율 계산
-export const getTaskProgress = (subtasks?: any[]) => {
+export const getTaskProgress = (subtasks?: { completed: boolean }[]) => {
   if (!subtasks || subtasks.length === 0) return 0;
 
   const completedCount = subtasks.filter((subtask) => subtask.completed).length;
@@ -148,7 +148,7 @@ export const getTaskDeadlineStatus = (endedAt?: string) => {
   const today = new Date();
   const deadline = new Date(endedAt);
   const diffDays = Math.ceil(
-    (deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+    (deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
   );
 
   if (diffDays < 0) return "overdue"; // 지연

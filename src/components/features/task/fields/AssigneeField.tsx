@@ -17,7 +17,18 @@ interface AssigneeFieldProps {
   // 편집 모드 props (TaskDetail용)
   isEditing?: boolean;
   isLoading?: boolean;
-  members?: any;
+  members?: Array<{
+    user_id: string;
+    role: string;
+    users: {
+      id?: string;
+      name?: string;
+      user_name?: string;
+      email: string;
+      avatar_url?: string;
+      profile_image?: string;
+    };
+  }> | null;
   onEdit?: () => void;
   onBlur?: () => void;
   onCancel?: () => void;
@@ -49,15 +60,25 @@ export function AssigneeField({
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // 유틸리티: 멤버 이름 가져오기 (name 또는 user_name 지원)
+  const getMemberName = (member: NonNullable<typeof members>[number]) => {
+    return member.users?.name || member.users?.user_name || "";
+  };
+
+  // 유틸리티: 멤버 프로필 이미지 가져오기
+  const getMemberImage = (member: NonNullable<typeof members>[number]) => {
+    return member.users?.avatar_url || member.users?.profile_image;
+  };
+
   // 선택된 멤버 처리
-  const selectedMember = members?.find((m: any) => m.user_id === value);
+  const selectedMember = members?.find((m) => m.user_id === value);
 
   // 입력값에 따른 멤버 필터링
-  const filteredMembers = (members || []).filter((member: any) => {
+  const filteredMembers = (members || []).filter((member) => {
     if (!searchTerm) return true; // 검색어가 없으면 전체 표시
 
     const searchLower = searchTerm.toLowerCase();
-    const userName = member.users?.user_name?.toLowerCase() || "";
+    const userName = getMemberName(member).toLowerCase();
     const email = member.users?.email?.toLowerCase() || "";
     const userId = member.user_id?.toLowerCase() || "";
 
@@ -75,9 +96,8 @@ export function AssigneeField({
     onBlur?.();
   };
 
-  const handleImageError = (userId?: string) => {
+  const handleImageError = () => {
     // 이미지 로드 실패시 처리 (옵션)
-    // console.log("Image load failed for user:", userId);
   };
 
   // 편집 모드 렌더링 (TaskDetail용)
@@ -104,13 +124,15 @@ export function AssigneeField({
           >
             <div className="flex items-center gap-3 p-2">
               <UserAvatar
-                userName={selectedMember?.users?.user_name || ""}
-                profileImage={selectedMember?.users?.profile_image}
+                userName={selectedMember ? getMemberName(selectedMember) : ""}
+                profileImage={
+                  selectedMember ? getMemberImage(selectedMember) : undefined
+                }
                 size={32}
               />
               <div className="flex-1">
                 <div className="text-sm text-gray-700 dark:text-gray-300">
-                  {selectedMember?.users?.user_name}
+                  {selectedMember ? getMemberName(selectedMember) : ""}
                   <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
                     ({selectedMember?.role})
                   </span>
@@ -160,7 +182,7 @@ export function AssigneeField({
           <input
             type="text"
             value={searchTerm || ""}
-            onChange={(e: any) => {
+            onChange={(e) => {
               const inputValue = e.target.value;
               setSearchTerm(inputValue);
               setIsOpen(true);
@@ -169,7 +191,7 @@ export function AssigneeField({
               setIsOpen(true);
               // 포커스 시 현재 선택된 멤버 이름을 searchTerm에 설정
               if (selectedMember) {
-                setSearchTerm(selectedMember.users.user_name);
+                setSearchTerm(getMemberName(selectedMember));
               }
             }}
             onBlur={() => {
@@ -177,11 +199,11 @@ export function AssigneeField({
               setTimeout(() => setIsOpen(false), 200);
               onBlur?.();
             }}
-            onKeyDown={(e: any) => {
+            onKeyDown={(e) => {
               if (e.key === "Enter" && filteredMembers.length > 0) {
                 handleSelectMember(
                   filteredMembers[0].user_id,
-                  filteredMembers[0].users.user_name
+                  getMemberName(filteredMembers[0]),
                 );
               }
               if (e.key === "Escape") {
@@ -217,32 +239,29 @@ export function AssigneeField({
             {/* 드롭다운 목록 - 3명부터 스크롤 */}
             {!isLoading && filteredMembers.length > 0 && (
               <div className="border border-gray-200 dark:border-gray-600 rounded-lg max-h-[120px] overflow-y-auto bg-white dark:bg-gray-800 shadow-lg">
-                {filteredMembers.map((member: any) => (
+                {filteredMembers.map((member) => (
                   <div
                     key={member.user_id}
                     onMouseDown={(e) => {
                       e.preventDefault();
-                      handleSelectMember(
-                        member.user_id,
-                        member.users.user_name
-                      );
+                      handleSelectMember(member.user_id, getMemberName(member));
                     }}
                     className="flex items-center gap-3 px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
                   >
                     <UserAvatar
-                      userName={member.users.user_name}
-                      profileImage={member.users.profile_image}
+                      userName={getMemberName(member)}
+                      profileImage={getMemberImage(member)}
                       size={32}
                     />
                     <div className="flex-1">
                       <div className="text-sm text-gray-700 dark:text-gray-300">
-                        {member.users.user_name}
+                        {getMemberName(member)}
                         <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
                           ({member.role})
                         </span>
                       </div>
                       <div className="text-xs text-gray-500 dark:text-gray-400">
-                        {member.users.email}
+                        {member.users?.email}
                       </div>
                     </div>
                   </div>
@@ -264,20 +283,20 @@ export function AssigneeField({
           <div className="mt-2 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800">
             <div className="flex items-center gap-3 px-3 py-2">
               <UserAvatar
-                userName={selectedMember?.users?.user_name || ""}
-                profileImage={selectedMember?.users?.profile_image}
+                userName={getMemberName(selectedMember)}
+                profileImage={getMemberImage(selectedMember)}
                 size={32}
-                onImageError={() => handleImageError(selectedMember?.user_id)}
+                onImageError={handleImageError}
               />
               <div className="flex-1">
                 <div className="text-sm text-gray-700 dark:text-gray-300">
-                  {selectedMember.users.user_name}
+                  {getMemberName(selectedMember)}
                   <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
                     ({selectedMember.role})
                   </span>
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">
-                  {selectedMember.users.email}
+                  {selectedMember.users?.email}
                 </div>
               </div>
               <button

@@ -26,7 +26,7 @@ const SubtaskList = ({
   const [newSubtaskTitle, setNewSubtaskTitle] = useState("");
   const [showAddInput, setShowAddInput] = useState(false);
   const [deletingSubtaskId, setDeletingSubtaskId] = useState<string | null>(
-    null
+    null,
   );
 
   const { modalProps, openModal, closeModal } = useModal();
@@ -37,7 +37,7 @@ const SubtaskList = ({
     if (!editable || !onUpdate || disabled) return;
 
     const updated = subtasks.map((s) =>
-      s.id === subtaskId ? { ...s, completed: !s.completed } : s
+      s.id === subtaskId ? { ...s, completed: !s.completed } : s,
     );
     onUpdate(updated);
   };
@@ -52,7 +52,7 @@ const SubtaskList = ({
     if (!editable || !onUpdate || !editingTitle.trim()) return;
 
     const updated = subtasks.map((s) =>
-      s.id === subtaskId ? { ...s, title: editingTitle } : s
+      s.id === subtaskId ? { ...s, title: editingTitle } : s,
     );
     onUpdate(updated);
     setEditingId(null);
@@ -208,8 +208,10 @@ const SubtaskList = ({
                 <input
                   type="text"
                   value={editingTitle}
-                  onChange={(e: any) => setEditingTitle(e.target.value)}
-                  onKeyDown={(e: any) => {
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setEditingTitle(e.target.value)
+                  }
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                     if (e.key === "Enter") handleSaveEdit(subtask.id);
                     if (e.key === "Escape") handleCancelEdit();
                   }}
@@ -273,8 +275,10 @@ const SubtaskList = ({
           <input
             type="text"
             value={newSubtaskTitle}
-            onChange={(e: any) => setNewSubtaskTitle(e.target.value)}
-            onKeyDown={(e: any) => {
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setNewSubtaskTitle(e.target.value)
+            }
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
               if (e.key === "Enter") handleAddSubtask();
               if (e.key === "Escape") {
                 setShowAddInput(false);

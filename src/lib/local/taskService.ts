@@ -1,6 +1,6 @@
 // src/lib/local/taskService.ts
 
-import { Task, TaskStatus, TaskPriority } from "@/types";
+import { Task, TaskStatus } from "@/types";
 import { getItem, setItem, STORAGE_KEYS } from "./storage";
 
 // 초기 Mock 데이터

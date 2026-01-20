@@ -193,7 +193,7 @@ export default function CalendarView({
 
       return true;
     });
-  }, [tasks, filter, session]);
+  }, [tasks, filter]);
 
   /**
    * 필터 변경 핸들러

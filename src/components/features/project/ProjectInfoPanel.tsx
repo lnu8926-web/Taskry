@@ -27,6 +27,7 @@ import {
   Crown,
 } from "lucide-react";
 import { Task } from "@/types/kanban";
+import { getProjectMembersForAssignment } from "@/lib/constants";
 
 interface ProjectMember {
   user_id: string;
@@ -63,18 +64,24 @@ export default function ProjectInfoPanel({
 
   // 팀원 정보 로드
   useEffect(() => {
-    const fetchMembers = async () => {
+    const fetchMembers = () => {
       if (!projectId) return;
 
       setIsLoadingMembers(true);
       try {
-        const response = await fetch(
-          `/api/projectMembers/forAssignment?projectId=${projectId}`
-        );
-        if (response.ok) {
-          const result = await response.json();
-          setMembers(result.data || []);
-        }
+        const memberList = getProjectMembersForAssignment(projectId);
+        // MockMember를 ProjectMember 형식으로 변환
+        const formattedMembers: ProjectMember[] = memberList.map((m) => ({
+          user_id: m.user_id,
+          role: "member",
+          users: {
+            user_id: m.user_id,
+            user_name: m.user_name,
+            email: m.email,
+            profile_image: m.profile_image,
+          },
+        }));
+        setMembers(formattedMembers);
       } catch (error) {
         console.error("팀원 조회 실패:", error);
       } finally {
@@ -255,8 +262,8 @@ export default function ProjectInfoPanel({
                       timeline.status === "ended"
                         ? "bg-red-500"
                         : timeline.status === "warning"
-                        ? "bg-orange-500"
-                        : "bg-main-500"
+                          ? "bg-orange-500"
+                          : "bg-main-500"
                     }`}
                     style={{ width: `${timeline.progressPercent}%` }}
                   />
