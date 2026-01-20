@@ -187,7 +187,7 @@ export default function ProjectPage() {
         <aside
           className={`flex flex-col transition-all duration-300 overflow-hidden min-h-0 shrink-0 ${
             showProjectInfoPanel
-              ? `w-[240px] lg:w-[280px] ${
+              ? `w-240px lg:w-280px ${
                   showMemoPanel ? "xl:w-[260px]" : "xl:w-[300px]"
                 } opacity-100`
               : "w-0 opacity-0"
@@ -254,8 +254,8 @@ export default function ProjectPage() {
         <aside
           className={`flex flex-col transition-all duration-300 overflow-hidden min-h-0 shrink-0 ${
             showMemoPanel
-              ? `w-[240px] lg:w-[280px] ${
-                  showProjectInfoPanel ? "xl:w-[260px]" : "xl:w-[300px]"
+              ? `w-240px lg:w-280px ${
+                  showProjectInfoPanel ? "xl:w-260px" : "xl:w-300px"
                 } opacity-100`
               : "w-0 opacity-0"
           }`}

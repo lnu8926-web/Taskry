@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { UserAvatar } from "@/components/shared/UserAvatar";
+import { getProjectMembersForAssignment } from "@/lib/constants";
 
 /**
  * AssigneeInfo: 프로젝트 담당자 정보를 표시하는 컴포넌트
@@ -28,10 +29,10 @@ const AssigneeInfo = ({ userId, projectId }: AssigneeInfoProps) => {
 
   useEffect(() => {
     /**
-     * 프로젝트 멤버 중 userId에 해당하는 사용자 정보 fetch
+     * 프로젝트 멤버 중 userId에 해당하는 사용자 정보 조회
      */
-    const fetchUserInfo = async () => {
-      // projectId 또는 userId가 유효하지 않으면 API 호출 방지
+    const fetchUserInfo = () => {
+      // projectId 또는 userId가 유효하지 않으면 조회 방지
       if (
         !projectId ||
         projectId === "undefined" ||
@@ -44,29 +45,19 @@ const AssigneeInfo = ({ userId, projectId }: AssigneeInfoProps) => {
       }
 
       try {
-        const response = await fetch(
-          `/api/projectMembers/forAssignment?projectId=${projectId}`,
-        );
-        if (!response.ok) throw new Error("Failed to fetch user info");
-        const result = await response.json();
-        const member = result.data?.find(
-          (m: {
-            user_id: string;
-            users: { user_name: string; email: string; profile_image?: string };
-            role: string;
-          }) => m.user_id === userId,
-        );
+        const members = getProjectMembersForAssignment(projectId);
+        const member = members.find((m) => m.user_id === userId);
         if (member) {
           setUserInfo({
             user_id: member.user_id,
-            user_name: member.users.user_name,
-            email: member.users.email,
-            profile_image: member.users.profile_image,
-            role: member.role,
+            user_name: member.user_name,
+            email: member.email,
+            profile_image: member.profile_image,
+            role: "member",
           });
         }
       } catch {
-        // 네트워크/파싱 에러 처리
+        // 에러 처리
         setUserInfo(null);
       } finally {
         setIsLoading(false);

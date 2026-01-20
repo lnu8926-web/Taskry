@@ -12,7 +12,8 @@ export {
 } from "./kanban";
 
 // 담당자 관련
-export { MOCK_TEAM_MEMBERS } from "./assignees";
+export { MOCK_TEAM_MEMBERS, getProjectMembersForAssignment } from "./assignees";
+export type { MockMember } from "./assignees";
 
 // 메시지 관련
 export { TASK_MESSAGES } from "./messages";

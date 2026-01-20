@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { Task, TaskStatus, TaskPriority, Subtask } from "@/types";
+import { getProjectMembersForAssignment } from "@/lib/constants";
 import Button from "@/components/ui/Button";
 
 // 공용 컴포넌트
@@ -118,17 +119,22 @@ export default function TaskAdd({
   })();
 
   useEffect(() => {
-    const fetchMember = async () => {
+    const fetchMember = () => {
       setIsLoadingMembers(true);
       try {
-        const response = await fetch(
-          `/api/projectMembers/forAssignment?projectId=${projectId}`,
-        );
-        if (!response.ok) {
-          throw new Error("프로젝트 멤버를 불러오는 데 실패했습니다.");
-        }
-        const result = await response.json();
-        setMembers(result.data || []);
+        const memberList = getProjectMembersForAssignment(projectId);
+        // MockMember를 ProjectMember 형식으로 변환
+        const formattedMembers: ProjectMember[] = memberList.map((m) => ({
+          project_id: projectId,
+          user_id: m.user_id,
+          role: "member",
+          users: {
+            user_name: m.user_name,
+            email: m.email,
+            profile_image: m.profile_image,
+          },
+        }));
+        setMembers(formattedMembers);
       } catch (error) {
         console.error(error);
         setErrors((prev) => ({

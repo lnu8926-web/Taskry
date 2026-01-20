@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import Button from "@/components/ui/Button"; // 공통 버튼 컴포넌트
 import { Icon } from "@/components/shared/Icon"; // 아이콘 컴포넌트
 import { showToast } from "@/lib/utils/toast"; // 토스트 알림
-import { TASK_MESSAGES } from "@/lib/constants"; // 메시지 상수
+import { TASK_MESSAGES, getProjectMembersForAssignment } from "@/lib/constants"; // 메시지 상수, 멤버 조회
 import { useModal } from "@/hooks/useModal"; // 모달 상태 관리 훅
 import Modal from "@/components/ui/Modal"; // 모달 컴포넌트
 
@@ -146,12 +146,12 @@ export default function TaskDetail({
   // 🚀 컴포넌트 마운트 시 프로젝트 멤버 데이터 조회
   useEffect(() => {
     /**
-     * 👥 프로젝트 멤버 조회 비동기 함수
+     * 👥 프로젝트 멤버 조회 함수
      *
      * 목적: 담당자 드롭다운에 표시할 멤버 목록 조회
-     * API 엔드포인트: /api/projectMembers/forAssignment
+     * 로컬 서비스: getProjectMembersForAssignment
      */
-    const fetchMember = async () => {
+    const fetchMember = () => {
       // 🛡️ 가드: 프로젝트 ID 필수 확인
       if (!task.project_id) {
         console.warn("프로젝트 ID가 없습니다.");
@@ -160,40 +160,31 @@ export default function TaskDetail({
 
       setIsLoadingMembers(true); // 로딩 상태 시작
       try {
-        // 🌐 API 호출: 프로젝트 멤버 목록 요청
-        const response = await fetch(
-          `/api/projectMembers/forAssignment?projectId=${task.project_id}`,
-        );
-
-        // 🚑 HTTP 에러 처리
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(
-            errorData.error ||
-              `HTTP ${response.status}: 프로젝트 멤버를 불러오는 데 실패했습니다.`,
-          );
-        }
-
-        const result = await response.json();
-
-        // 📈 응답 데이터 처리
-        if (result.data) {
-          setMembers(result.data); // 성공: 멤버 목록 설정
-        } else {
-          console.warn("프로젝트 멤버 데이터가 없습니다:", result);
-          setMembers([]); // 데이터 없음: 빈 배열
-        }
+        // 로컬 서비스에서 멤버 목록 조회
+        const memberList = getProjectMembersForAssignment(task.project_id);
+        // MockMember를 ProjectMember 형식으로 변환
+        const formattedMembers: ProjectMember[] = memberList.map((m) => ({
+          project_id: task.project_id,
+          user_id: m.user_id,
+          role: "member",
+          users: {
+            id: m.user_id,
+            name: m.user_name,
+            email: m.email,
+            avatar_url: m.profile_image || "",
+          },
+        }));
+        setMembers(formattedMembers);
       } catch (error) {
-        // 🚑 예외 처리: 네트워크 오류, API 에러 등
+        // 🚑 예외 처리
         console.error("프로젝트 멤버 조회 에러:", error);
-        // 에러가 발생해도 UI가 깨지지 않도록 빈 배열로 설정
         setMembers([]);
       } finally {
         setIsLoadingMembers(false); // 로딩 상태 종료
       }
     };
 
-    fetchMember(); // 비동기 함수 실행
+    fetchMember(); // 함수 실행
   }, [
     task.project_id,
     task.id,
