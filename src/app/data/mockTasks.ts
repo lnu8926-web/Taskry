@@ -1,11 +1,12 @@
 // Mock 데이터 - 실제 DB 없이 테스트용
-import { Task } from "../types/kanban";
+import { Task } from "@/types/kanban";
 
 export const mockTasks: Task[] = [
   // 프로젝트 1: project01
   {
     id: "1",
     kanban_board_id: "project01",
+    project_id: "project01",
     title: "메인 페이지 UI 개선",
     description: "메인 페이지 레이아웃 및 반응형 디자인 적용",
     status: "inprogress",
@@ -25,6 +26,7 @@ export const mockTasks: Task[] = [
   {
     id: "2",
     kanban_board_id: "project01",
+    project_id: "project01",
     title: "성능 최적화",
     description: "번들 사이즈 축소 및 로딩 속도 개선",
     status: "todo",
@@ -44,6 +46,7 @@ export const mockTasks: Task[] = [
   {
     id: "3",
     kanban_board_id: "project01",
+    project_id: "project01",
     title: "사용자 피드백 반영",
     description: "베타 테스트 피드백 검토 및 수정",
     status: "done",
@@ -65,6 +68,7 @@ export const mockTasks: Task[] = [
   {
     id: "4",
     kanban_board_id: "project02",
+    project_id: "project02",
     title: "React Native 프로젝트 셋업",
     description: "초기 프로젝트 구조 및 환경 설정",
     status: "done",
@@ -84,6 +88,7 @@ export const mockTasks: Task[] = [
   {
     id: "5",
     kanban_board_id: "project02",
+    project_id: "project02",
     title: "로그인 화면 개발",
     description: "소셜 로그인 및 일반 로그인 구현",
     status: "inprogress",
@@ -103,6 +108,7 @@ export const mockTasks: Task[] = [
   {
     id: "6",
     kanban_board_id: "project02",
+    project_id: "project02",
     title: "푸시 알림 기능",
     description: "FCM을 이용한 푸시 알림 구현",
     status: "todo",
@@ -120,6 +126,7 @@ export const mockTasks: Task[] = [
   {
     id: "7",
     kanban_board_id: "project03",
+    project_id: "project03",
     title: "API 문서화",
     description: "Swagger를 이용한 API 문서 자동화",
     status: "inprogress",
@@ -139,6 +146,7 @@ export const mockTasks: Task[] = [
   {
     id: "8",
     kanban_board_id: "project03",
+    project_id: "project03",
     title: "데이터베이스 쿼리 최적화",
     description: "느린 쿼리 개선 및 인덱스 추가",
     status: "todo",
@@ -158,6 +166,7 @@ export const mockTasks: Task[] = [
   {
     id: "9",
     kanban_board_id: "project03",
+    project_id: "project03",
     title: "에러 핸들링 개선",
     description: "통일된 에러 응답 형식 및 로깅 시스템 구축",
     status: "todo",

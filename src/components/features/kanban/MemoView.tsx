@@ -12,7 +12,7 @@ interface MemoFormProps {
   projectId: string;
 }
 
-const MemoView = ({ projectId }: MemoFormProps) => {
+const MemoView = ({ projectId: _projectId }: MemoFormProps) => {
   return (
     <div className="flex flex-col items-center justify-center h-full text-gray-500 dark:text-gray-400 p-8">
       <Icon type="document" size={48} className="mb-4 opacity-50" />

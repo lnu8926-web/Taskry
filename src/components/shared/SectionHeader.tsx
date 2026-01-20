@@ -8,7 +8,6 @@ export function SectionHeader({
   title,
   description,
   className,
-  ...props
 }: SectionHeaderProps) {
   const allClasses = `mb-7 ${className}`;
 

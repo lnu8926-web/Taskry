@@ -17,11 +17,12 @@ import {
   getProjectById,
   updateProject,
 } from "@/lib/local";
+import { ProjectStatus } from "@/types/project";
 
 interface ProjectProps {
   projectName: string;
   type: string;
-  status: string;
+  status: ProjectStatus;
   startedAt: Date | undefined;
   endedAt: Date | undefined;
   createdAt: Date | undefined;
@@ -36,7 +37,7 @@ export default function ProjectForm() {
   const [projectData, setProjectData] = useState<ProjectProps>({
     projectName: "",
     type: "",
-    status: "",
+    status: "active",
     startedAt: new Date(),
     endedAt: new Date(),
     createdAt: undefined,

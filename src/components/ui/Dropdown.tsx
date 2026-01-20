@@ -1,8 +1,15 @@
 "use client";
 
 import { Icon } from "@/components/shared/Icon";
-import { primaryBorderColor, primaryBgColor } from "@/app/sample/color/page";
 import { useState } from "react";
+
+// 색상 상수 정의 (기존 sample/color/page에서 이동)
+const primaryBorderColor = {
+  Color2: ["border-gray-200 dark:border-gray-700"]
+};
+const primaryBgColor = {
+  Color2: ["bg-gray-100 dark:bg-gray-800"]
+};
 
 type DropdownType = "view" | "theme";
 
@@ -48,7 +55,7 @@ export default function DropdownToggle({
         </button>
       );
     }
-    return [];
+    return null;
   };
   const options = () => {
     if (type === "view") {
@@ -76,6 +83,7 @@ export default function DropdownToggle({
         },
       ];
     }
+    return [];
   };
   const getOptions = options();
 

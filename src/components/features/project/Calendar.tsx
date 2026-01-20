@@ -25,7 +25,6 @@ export function Calendar22({
   placeholder = "Select Date",
 }: Calendar22Props) {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(undefined);
 
   const handleSelectDate = (selectedDate: Date | undefined) => {
     // 외부로 변경 사항을 알립니다.
