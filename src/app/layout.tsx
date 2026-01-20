@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/layout/Sidebar";
@@ -17,9 +17,27 @@ const geistMono = Geist_Mono({
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const viewport: Viewport = {
+  themeColor: "#3b82f6",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+};
+
 export const metadata: Metadata = {
   title: "Taskry",
   description: "칸반보드 기반 프로젝트 관리 도구",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Taskry",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export default function RootLayout({
@@ -37,7 +55,9 @@ export default function RootLayout({
           <div className="h-full flex flex-col">
             <div className="flex-1 flex overflow-hidden">
               <Sidebar />
-              <main className="flex-1 overflow-auto">{children}</main>
+              <main className="flex-1 overflow-auto pb-16 md:pb-0">
+                {children}
+              </main>
             </div>
             <Toaster />
           </div>

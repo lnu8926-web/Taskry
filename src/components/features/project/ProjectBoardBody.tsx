@@ -92,8 +92,8 @@ export default function ProjectBoard() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-[calc(100vh-400px)]">
-        <span className="text-lg text-gray-500">
+      <div className="flex justify-center items-center h-[50vh] sm:h-[calc(100vh-400px)]">
+        <span className="text-base sm:text-lg text-gray-500">
           프로젝트를 불러오는 중입니다...
         </span>
       </div>
@@ -110,15 +110,14 @@ export default function ProjectBoard() {
 
   return (
     <div className="pb-10">
-      <div className="h-[calc(100vh-400px)] overflow-y-auto">
+      <div className="h-[50vh] sm:h-[calc(100vh-400px)] overflow-y-auto">
         <div
           className="
             grid
             grid-cols-1
-            sm:grid-cols-1
-            md:grid-cols-2
+            sm:grid-cols-2
             lg:grid-cols-3
-            gap-4"
+            gap-3 sm:gap-4"
         >
           {sortedProjectList.map((project) => (
             <ProjectCard
