@@ -13,6 +13,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { MIST, COMPLEMENTARY } from "@/lib/constants";
 
 interface SidebarProps {
   className?: string;
@@ -67,21 +68,37 @@ export default function Sidebar({ className }: SidebarProps) {
               ? `fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"}`
               : "relative"
           }
-          w-64 h-full bg-gray-50 border-r border-gray-200 flex flex-col
+          w-64 h-full bg-white border-r border-gray-200 flex flex-col
           ${className || ""}
         `}
       >
-        <div className="p-4 border-b border-gray-200">
-          <h1 className="text-xl font-bold text-blue-600">Taskry</h1>
+        {/* 로고 영역 */}
+        <div 
+          className="p-4 border-b border-gray-200"
+          style={{ backgroundColor: MIST.LIGHT }}
+        >
+          <h1 
+            className="text-xl font-bold"
+            style={{ color: MIST.DARKEST }}
+          >
+            Taskry
+          </h1>
         </div>
 
+        {/* 검색 영역 */}
         <div className="p-4">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+            <Search 
+              className="absolute left-3 top-2.5 h-4 w-4" 
+              style={{ color: MIST.MEDIUM }}
+            />
             <input
               type="text"
               placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm focus:outline-none focus:ring-2 focus:bg-white transition-colors"
+              style={{ 
+                ["--tw-ring-color" as string]: MIST.DEFAULT,
+              }}
             />
           </div>
         </div>
@@ -115,27 +132,32 @@ export default function Sidebar({ className }: SidebarProps) {
           />
 
           <div className="pt-4 mt-4 border-t border-gray-200">
-            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <h3 
+              className="text-xs font-semibold uppercase tracking-wider"
+              style={{ color: MIST.MEDIUM }}
+            >
               Projects
             </h3>
             <div className="mt-3 space-y-1">
               <ProjectItem
-                color="bg-green-500"
+                color={MIST.DEFAULT}
                 name="Marketing Website"
                 onClick={closeSidebar}
               />
               <ProjectItem
-                color="bg-purple-500"
+                color={COMPLEMENTARY.CORAL}
                 name="Mobile App"
                 onClick={closeSidebar}
               />
               <ProjectItem
-                color="bg-yellow-500"
+                color={COMPLEMENTARY.CREAM}
                 name="Q4 Planning"
                 onClick={closeSidebar}
               />
-              <button className="flex items-center w-full px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md">
-                <Plus size={16} className="mr-2 text-gray-400" />
+              <button 
+                className="flex items-center w-full px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+              >
+                <Plus size={16} className="mr-2" style={{ color: MIST.MEDIUM }} />
                 Add Project
               </button>
             </div>
@@ -183,11 +205,15 @@ function SidebarItem({
   return (
     <button
       onClick={onClick}
-      className={`flex items-center w-full px-2 py-2 text-sm rounded-md ${
+      className={`flex items-center w-full px-2 py-2 text-sm rounded-md transition-colors ${
         active
-          ? "bg-blue-50 text-blue-700 font-medium"
+          ? "font-medium"
           : "text-gray-600 hover:bg-gray-100"
       }`}
+      style={active ? { 
+        backgroundColor: MIST.LIGHT, 
+        color: MIST.DARKEST 
+      } : undefined}
     >
       <span className="mr-3">{icon}</span>
       {label}
@@ -205,9 +231,12 @@ function ProjectItem({ color, name, onClick }: ProjectItemProps) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center w-full px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md"
+      className="flex items-center w-full px-2 py-1.5 text-sm text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
     >
-      <span className={`h-2 w-2 rounded-full ${color} mr-3`}></span>
+      <span 
+        className="h-2 w-2 rounded-full mr-3"
+        style={{ backgroundColor: color }}
+      />
       {name}
     </button>
   );
@@ -222,9 +251,8 @@ interface MobileNavItemProps {
 function MobileNavItem({ icon, label, active = false }: MobileNavItemProps) {
   return (
     <button
-      className={`flex flex-col items-center justify-center px-3 py-1 rounded-lg min-w-[60px] ${
-        active ? "text-blue-600" : "text-gray-500"
-      }`}
+      className="flex flex-col items-center justify-center px-3 py-1 rounded-lg min-w-[60px] transition-colors"
+      style={{ color: active ? MIST.DARKEST : "#6B7280" }}
     >
       {icon}
       <span className="text-xs mt-1">{label}</span>
