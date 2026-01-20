@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { useSession } from "next-auth/react";
 import { format } from "date-fns";
 import {
   DndContext,
@@ -39,7 +38,7 @@ interface KanbanBoardProps {
     ended_at?: string;
   } | null;
   onCreateTask?: (
-    taskData: Omit<Task, "id" | "created_at" | "updated_at">
+    taskData: Omit<Task, "id" | "created_at" | "updated_at">,
   ) => void;
   onUpdateTask?: (taskId: string, updates: Partial<Task>) => void;
   onDeleteTask?: (taskId: string) => void;
@@ -95,8 +94,6 @@ const KanbanBoard = ({
     setSelectedTask: () => setSelectedTask(null),
   });
 
-  const { data: session, status } = useSession();
-
   const isOutsideProjectRange = useCallback(
     (date: Date) => {
       if (!projectStartedAt || !projectEndedAt) return false;
@@ -104,7 +101,7 @@ const KanbanBoard = ({
       const dateStr = format(date, "yyyy-MM-dd");
       return dateStr < projectStartedAt || dateStr > projectEndedAt;
     },
-    [projectStartedAt, projectEndedAt]
+    [projectStartedAt, projectEndedAt],
   );
 
   const sensors = useSensors(
@@ -112,33 +109,17 @@ const KanbanBoard = ({
       activationConstraint: {
         distance: 8,
       },
-    })
+    }),
   );
 
   const filteredTasks = useMemo(() => {
-    if (status === "loading") {
-      return [];
-    }
-
-    if (filter.assignee === "me") {
-      console.log("내 작업 필터 활성화");
-      console.log("세션 상태:", status);
-      console.log("현재 사용자 ID:", session?.user?.user_id);
-      console.log(
-        "전체 태스크:",
-        tasks.map((t) => ({
-          id: t.id,
-          title: t.title,
-          assigned_user_id: t.assigned_user_id,
-        }))
-      );
-    }
-
     return tasks.filter((task) => {
+      // 우선순위 필터
       if (filter.priority !== "all" && task.priority !== filter.priority) {
         return false;
       }
 
+      // 담당자 필터 (assigned/unassigned만 유지)
       if (filter.assignee !== "all") {
         if (filter.assignee === "assigned" && !task.assigned_user_id) {
           return false;
@@ -146,30 +127,15 @@ const KanbanBoard = ({
         if (filter.assignee === "unassigned" && task.assigned_user_id) {
           return false;
         }
-        if (filter.assignee === "me") {
-          const currentUserId = session?.user?.user_id;
-          const taskUserId = task.assigned_user_id;
-
-          console.log(
-            `태스크 '${task.title}' 체크 - 할당된 사용자: ${taskUserId}, 현재 사용자: ${currentUserId}`
-          );
-          console.log("타입 체크:", typeof taskUserId, typeof currentUserId);
-
-          const taskUserIdStr = taskUserId ? String(taskUserId) : null;
-          const currentUserIdStr = currentUserId ? String(currentUserId) : null;
-
-          if (!taskUserIdStr || taskUserIdStr !== currentUserIdStr) {
-            return false;
-          }
-        }
       }
 
+      // 날짜 필터
       if (filter.date !== "all") {
         const now = new Date();
         const today = new Date(
           now.getFullYear(),
           now.getMonth(),
-          now.getDate()
+          now.getDate(),
         );
 
         if (filter.date === "today") {
@@ -182,7 +148,7 @@ const KanbanBoard = ({
           const taskDateOnly = new Date(
             taskDate.getFullYear(),
             taskDate.getMonth(),
-            taskDate.getDate()
+            taskDate.getDate(),
           );
 
           if (taskDateOnly.getTime() !== today.getTime()) {
@@ -203,7 +169,7 @@ const KanbanBoard = ({
           const taskDateOnly = new Date(
             taskDate.getFullYear(),
             taskDate.getMonth(),
-            taskDate.getDate()
+            taskDate.getDate(),
           );
 
           if (taskDateOnly < weekStart || taskDateOnly > weekEnd) {
@@ -219,7 +185,7 @@ const KanbanBoard = ({
           const taskDateOnly = new Date(
             taskDate.getFullYear(),
             taskDate.getMonth(),
-            taskDate.getDate()
+            taskDate.getDate(),
           );
 
           if (taskDateOnly >= today) {
@@ -230,15 +196,18 @@ const KanbanBoard = ({
 
       return true;
     });
-  }, [tasks, filter, session, status]);
+  }, [tasks, filter]);
 
-  const groupedTasks = KANBAN_COLUMNS.reduce((acc, column) => {
-    const columnTasks = filteredTasks.filter(
-      (task) => task.status === column.id
-    );
-    acc[column.id] = columnTasks;
-    return acc;
-  }, {} as Record<TaskStatus, Task[]>);
+  const groupedTasks = KANBAN_COLUMNS.reduce(
+    (acc, column) => {
+      const columnTasks = filteredTasks.filter(
+        (task) => task.status === column.id,
+      );
+      acc[column.id] = columnTasks;
+      return acc;
+    },
+    {} as Record<TaskStatus, Task[]>,
+  );
 
   const handleDragStart = useCallback(
     (event: DragStartEvent) => {
@@ -246,7 +215,7 @@ const KanbanBoard = ({
       const task = tasks.find((t) => t.id === taskId);
       setActiveTask(task || null);
     },
-    [tasks]
+    [tasks],
   );
 
   const handleDragEnd = useCallback(
@@ -264,7 +233,7 @@ const KanbanBoard = ({
             new Date().toISOString().split("T")[0] > projectEndedAt
             ? "종료된 프로젝트입니다."
             : "아직 시작되지 않은 프로젝트입니다.",
-          "warning"
+          "warning",
         );
         setActiveTask(null);
         return;
@@ -294,7 +263,7 @@ const KanbanBoard = ({
 
       setActiveTask(null);
     },
-    [tasks, onUpdateTask, projectEndedAt, isOutsideProjectRange]
+    [tasks, onUpdateTask, projectEndedAt, isOutsideProjectRange],
   );
 
   const handleDragCancel = useCallback(() => {
@@ -314,7 +283,7 @@ const KanbanBoard = ({
       onTaskCreated?.();
       setShowTaskAddModal(false);
     },
-    [onCreateTask, onTaskCreated, setShowTaskAddModal]
+    [onCreateTask, onTaskCreated, setShowTaskAddModal],
   );
 
   const handleUpdateTask = (taskId: string, updates: Partial<Task>) => {

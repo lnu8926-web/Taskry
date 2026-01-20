@@ -1,4 +1,3 @@
-import { bgColorOpacity } from "@/app/sample/color/page";
 interface BadgeType {
   type: keyof typeof badgeConfigs;
 }
@@ -6,12 +5,12 @@ interface BadgeType {
 export const badgeConfigs = {
   dueSoon: {
     title: "계획 진행중",
-    className: `${bgColorOpacity.colorOpacity2[3]} text-white dark:text-white/80`,
+    className: "bg-blue-500 text-white dark:text-white/80",
     category: "status",
   },
   overDue: {
     title: "계획에서 벗어남",
-    className: `${bgColorOpacity.colorOpacity2[0]} text-white dark:text-white/80`,
+    className: "bg-red-500 text-white dark:text-white/80",
     category: "status",
   },
   todo: {
@@ -21,31 +20,31 @@ export const badgeConfigs = {
   },
   inProgress: {
     title: "진행중",
-    className: `${bgColorOpacity.colorOpacity2[4]} text-white dark:text-white/80`,
+    className: "bg-amber-500 text-white dark:text-white/80",
     category: "status",
   },
   done: {
     title: "완료",
-    className: `${bgColorOpacity.colorOpacity3[1]} text-white dark:text-white/80`,
+    className: "bg-green-500 text-white dark:text-white/80",
     category: "status",
   },
   high: {
     title: "높음",
-    className: `${bgColorOpacity.colorOpacity2[2]} text-red-700 dark:text-red-300`,
+    className: "bg-red-100 text-red-700 dark:text-red-300",
     category: "priority",
-    dotColor: `${bgColorOpacity.colorOpacity2[0]}`,
+    dotColor: "bg-red-500",
   },
   normal: {
     title: "보통",
-    className: `${bgColorOpacity.colorOpacity[5]} text-yellow-700 dark:text-yellow-300`,
+    className: "bg-yellow-100 text-yellow-700 dark:text-yellow-300",
     category: "priority",
-    dotColor: `${bgColorOpacity.colorOpacity[3]}`,
+    dotColor: "bg-yellow-500",
   },
   low: {
     title: "낮음",
-    className: `${bgColorOpacity.colorOpacity3[2]} text-green-700 dark:text-green-300`,
+    className: "bg-green-100 text-green-700 dark:text-green-300",
     category: "priority",
-    dotColor: `${bgColorOpacity.colorOpacity3[0]}`,
+    dotColor: "bg-green-500",
   },
 };
 

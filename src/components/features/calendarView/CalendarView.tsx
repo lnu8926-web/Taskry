@@ -2,7 +2,6 @@
 
 // React 및 라이브러리
 import { useCallback, useState, useMemo } from "react";
-import { useSession } from "next-auth/react";
 import { format } from "date-fns";
 
 // 타입
@@ -124,9 +123,6 @@ export default function CalendarView({
     date: "all",
   });
 
-  // 세션 정보
-  const { data: session } = useSession();
-
   /**
    * 필터링된 태스크 목록
    */
@@ -137,7 +133,7 @@ export default function CalendarView({
         return false;
       }
 
-      // 담당자 필터
+      // 담당자 필터 (me 옵션은 로컬 모드에서 제외)
       if (filter.assignee !== "all") {
         switch (filter.assignee) {
           case "assigned":
@@ -145,13 +141,6 @@ export default function CalendarView({
             break;
           case "unassigned":
             if (task.assigned_user_id) return false;
-            break;
-          case "me":
-            if (
-              !session?.user?.user_id ||
-              task.assigned_user_id !== session.user.user_id
-            )
-              return false;
             break;
         }
       }

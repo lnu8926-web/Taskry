@@ -9,7 +9,6 @@ import Button from "@/components/ui/Button"; // 공통 버튼 컴포넌트
 import { Icon } from "@/components/shared/Icon"; // 아이콘 컴포넌트
 import { showToast } from "@/lib/utils/toast"; // 토스트 알림
 import { TASK_MESSAGES } from "@/lib/constants/messages"; // 메시지 상수
-import { supabase } from "@/lib/supabase/supabase"; // Supabase 클라이언트
 import { useModal } from "@/hooks/useModal"; // 모달 상태 관리 훅
 import Modal from "@/components/ui/Modal"; // 모달 컴포넌트
 
@@ -203,48 +202,7 @@ export default function TaskDetail({
     task.kanban_board_id,
   ]); // 의존성 배열: 이 값들이 변경되면 재실행
 
-  /**
-   * 🔄 assignee 정보 보강 useEffect
-   *
-   * 실시간 생성된 태스크에서 assignee 정보가 누락된 경우
-   * assigned_user_id를 기반으로 사용자 정보를 다시 조회
-   */
-  useEffect(() => {
-    const enrichAssigneeInfo = async () => {
-      // assigned_user_id는 있지만 assignee 정보가 없는 경우
-      if (task.assigned_user_id && !task.assignee) {
-        setIsLoadingAssignee(true);
-
-        try {
-          const { data: userData } = await supabase
-            .from("users")
-            .select("user_id, user_name, email")
-            .eq("user_id", task.assigned_user_id)
-            .single();
-
-          if (userData) {
-            const assigneeInfo = {
-              user_id: userData.user_id,
-              name: userData.user_name,
-              email: userData.email,
-            };
-
-            // editedTask에 assignee 정보 보강
-            setEditedTask((prev) => ({
-              ...prev,
-              assignee: assigneeInfo,
-            }));
-          }
-        } catch (error) {
-          console.error("TaskDetail assignee 정보 로드 실패:", error);
-        } finally {
-          setIsLoadingAssignee(false);
-        }
-      }
-    };
-
-    enrichAssigneeInfo();
-  }, [task.assigned_user_id, task.assignee]); // assignee 정보 변경 시 재실행
+  // 1인 개발 모드: assignee 정보 보강은 불필요
 
   /**
    * 🔍 변경사항 감지 함수

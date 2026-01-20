@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import {Button} from "@/components/ui/shadcn/Button"
+import { useState } from "react";
+import { Button } from "@/components/ui/shadcn/ShadcnButton";
 import {
   Command,
   CommandEmpty,
@@ -9,77 +9,77 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/shadcn/Command"
+} from "@/components/ui/shadcn/Command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/shadcn/Popover"
-
+} from "@/components/ui/shadcn/Popover";
 
 export type Item = {
   id: string;
   value: string;
   label: string;
   email: string;
-}
+};
 
 interface ComboBoxProps {
-  items: Item[]
-  value: Item | null
-  setValue: (item: Item | null) => void
-  onChange?: (item: Item | null) => void 
-  placeholder?: string
+  items: Item[];
+  value: Item | null;
+  setValue: (item: Item | null) => void;
+  onChange?: (item: Item | null) => void;
+  placeholder?: string;
 }
 
-export function ComboBox({ 
-  items, 
-  value, 
+export function ComboBox({
+  items,
+  value,
   setValue,
   onChange,
-  placeholder = "추가하고 싶은 팀원을 선택해주세요." 
+  placeholder = "추가하고 싶은 팀원을 선택해주세요.",
 }: ComboBoxProps) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-         <Button variant="outline" className="w-full justify-start px-3 text-left font-normal">
+        <Button
+          variant="outline"
+          className="w-full justify-start px-3 text-left font-normal"
+        >
           <span className="truncate w-full">
             {value ? value.label : placeholder}
           </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
-        <ItemList 
-          setOpen={setOpen} 
-          setValue={setValue} 
+      <PopoverContent
+        className="w-[var(--radix-popover-trigger-width)] p-0"
+        align="start"
+      >
+        <ItemList
+          setOpen={setOpen}
+          setValue={setValue}
           onChange={onChange}
           items={items}
         />
       </PopoverContent>
     </Popover>
-  )
+  );
 }
 
 // 내부 컴포넌트 Props 정의
 interface ItemListProps {
-  setOpen: (open: boolean) => void
-  setValue: (item: Item | null) => void
-  onChange?: (item: Item | null) => void
-  items: Item[]
+  setOpen: (open: boolean) => void;
+  setValue: (item: Item | null) => void;
+  onChange?: (item: Item | null) => void;
+  items: Item[];
 }
 
-function ItemList({
-  setOpen,
-  setValue,
-  onChange,
-  items,
-}: ItemListProps) {
+function ItemList({ setOpen, setValue, onChange, items }: ItemListProps) {
   return (
     <Command>
       <CommandInput placeholder="Filter status..." />
-      <CommandList >
+      <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup>
           {items.map((item) => (
@@ -87,12 +87,12 @@ function ItemList({
               key={item.id}
               value={item.value}
               onSelect={() => {
-                 setValue(item)
-                
+                setValue(item);
+
                 if (onChange) {
-                  onChange(item)
+                  onChange(item);
                 }
-                setOpen(false)
+                setOpen(false);
               }}
             >
               <span className="truncate w-full text-left block">
@@ -103,5 +103,5 @@ function ItemList({
         </CommandGroup>
       </CommandList>
     </Command>
-  )
+  );
 }

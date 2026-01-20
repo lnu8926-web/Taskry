@@ -1,0 +1,6 @@
+{
+  "/(main)/project/create/page": "app/(main)/project/create/page.js",
+  "/(main)/project/workspace/page": "app/(main)/project/workspace/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js"
+}

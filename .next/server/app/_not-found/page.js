@@ -1,0 +1,13 @@
+var R=require("../../chunks/ssr/[turbopack]_runtime.js")("server/app/_not-found/page.js")
+R.c("server/chunks/ssr/Documents_Project_NewTaskry_11216eba._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__33828ef1._.js")
+R.c("server/chunks/ssr/41557_next_dist_esm_build_templates_app-page_edc0f940.js")
+R.c("server/chunks/ssr/[root-of-the-server]__e1b3b1c2._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__d8ebe1eb._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__74d9fa82._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__846f01eb._.js")
+R.c("server/chunks/ssr/41557_next_dist_client_components_882b7d29._.js")
+R.c("server/chunks/ssr/41557_next_dist_client_components_builtin_forbidden_b7cf6a90.js")
+R.c("server/chunks/ssr/80b94_Project_NewTaskry__next-internal_server_app__not-found_page_actions_1d07dad1.js")
+R.m(98153)
+module.exports=R.m(98153).exports

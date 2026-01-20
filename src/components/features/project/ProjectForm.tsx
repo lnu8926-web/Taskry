@@ -1,28 +1,22 @@
 "use client";
 
 import Button from "@/components/ui/Button";
-import { Icon } from "@/components/shared/Icon";
 import { Calendar22 } from "@/components/features/project/Calendar";
 import { StatusSelect } from "@/components/features/project/StatusSelect";
 import { TypeSelect } from "@/components/features/project/TypeSelect";
 import { Input } from "@/components/ui/shadcn/Input";
 import { Label } from "@/components/ui/shadcn/Label";
 import { Textarea } from "@/components/ui/shadcn/Textarea";
+import { showToast } from "@/lib/utils/toast";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import ProjectDateCard from "./ProjectDateCard";
+import Container from "@/components/shared/Container";
 import {
   createProject,
   getProjectById,
-  getProjectMember,
   updateProject,
-  updateProjectMember,
-} from "@/lib/api/projects";
-import { showToast } from "@/lib/utils/toast";
-import { getUser, getUserById } from "@/lib/api/users";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { ComboBox, type Item } from "./ComboBox";
-import ProjectDateCard from "./ProjectDateCard";
-import { RoleSelect } from "./RoleSelect";
-import Container from "@/components/shared/Container";
+} from "@/lib/local";
 
 interface ProjectProps {
   projectName: string;
@@ -50,9 +44,6 @@ export default function ProjectForm() {
     techStack: "",
     description: "",
   });
-  const [user, setUser] = useState<Item | null>(null);
-  const [userList, setUserList] = useState<Item[]>([]);
-  const [projectMember, setProjectMember] = useState<any[]>([]);
 
   useEffect(() => {
     const storedProjectId = sessionStorage.getItem("current_Project_Id");
@@ -63,79 +54,33 @@ export default function ProjectForm() {
   }, [router]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // 유저 조회
-        const userResult = await getUser();
-        if (userResult.data) {
-          setUserList(
-            userResult.data.map(({ user_id, user_name, email }) => ({
-              id: user_id,
-              label: `${user_name} (${email})`,
-              value: user_name,
-              email,
-            }))
-          );
-        }
+    const fetchData = () => {
+      if (!projectId) {
+        return;
+      }
 
-        if (!projectId) {
-          return;
-        }
+      // 로컬 스토리지에서 프로젝트 정보 조회
+      const project = getProjectById(projectId);
 
-        // 프로젝트 정보 및 멤버 조회
-        const [projectResult, memberResult] = await Promise.all([
-          getProjectById(projectId),
-          getProjectMember(projectId),
-        ]);
-
-        
-        // 프로젝트 데이터 설정
-        const project = projectResult.data?.[0];
-        if (project) {
-          setProjectData({
-            ...project,
-            projectName: project.project_name,
-            startedAt: project.started_at,
-            endedAt: project.ended_at,
-            createdAt: project.created_at,
-            updatedAt: project.updated_at,
-            techStack: project.tech_stack,
-          });
-        }
-
-        // 프로젝트 멤버 데이터 설정
-        if (memberResult.data) {
-          const memberPromises = memberResult.data.map(async (member) => {
-            const { data } = await getUserById("eq", member.user_id);
-            const userInfo = data?.[0];
-
-            if (!userInfo) {
-              return null;
-            }
-
-            return {
-              projectId: projectId,
-              userId: userInfo.user_id,
-              userName: userInfo.user_name,
-              email: userInfo.email,
-              role: member.role,
-            };
-          });
-
-          const validMembers = (await Promise.all(memberPromises)).filter(
-            Boolean
-          );
-          setProjectMember(validMembers);
-        }
-      } catch (err) {
-        console.error(err);
+      if (project) {
+        setProjectData({
+          projectName: project.project_name,
+          type: project.type || "",
+          status: project.status || "",
+          startedAt: project.started_at ? new Date(project.started_at) : undefined,
+          endedAt: project.ended_at ? new Date(project.ended_at) : undefined,
+          createdAt: project.created_at ? new Date(project.created_at) : undefined,
+          updatedAt: project.updated_at ? new Date(project.updated_at) : undefined,
+          techStack: project.tech_stack || "",
+          description: project.description || "",
+        });
       }
     };
     fetchData();
   }, [projectId]);
 
   // 일반 Input과 Textarea를 위한 handleChange
-  const handleChange = (event: any) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setProjectData((prevProjectData) => ({
       ...prevProjectData,
@@ -151,18 +96,6 @@ export default function ProjectForm() {
     }));
   };
 
-  // RoleSelect 컴포넌트를 위한 handleChange
-  const handleRoleSelectChange = (index: number, value: string) => {
-    const newProjectMembers = [...projectMember];
-
-    newProjectMembers[index] = {
-      ...newProjectMembers[index],
-      role: value,
-    };
-
-    setProjectMember(newProjectMembers);
-  };
-
   // Calendar를 위한 핸들러
   const handleDateChange = (name: string, date: Date | undefined) => {
     if (!date) {
@@ -173,61 +106,32 @@ export default function ProjectForm() {
       return;
     }
 
-    const adjustedDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
-
     setProjectData((prevProjectData) => ({
       ...prevProjectData,
-      [name]: adjustedDate,
+      [name]: date,
     }));
   };
 
-  // 프로젝트 멤버 추가 핸들러
-  const handleAddProjectMember = (newItem: Item | null) => {
-    if (!newItem) {
-      return;
-    }
-    const isDuplicate = projectMember.some(
-      (member) => member.userId === newItem.id
-    );
-
-    if (isDuplicate) {
-      alert("이미 추가된 멤버입니다.");
-      return;
-    }
-
-    const newMember = {
-      projectId: projectId,
-      userId: newItem.id,
-      userName: newItem.value,
-      email: newItem.email,
-      role: "member",
-    };
-    setProjectMember((prev) => [...prev, newMember]);
-  };
-
-  // 프로젝트 멤버 삭제 핸들러
-  const handleDeleteProjectMember = (id: string) => {
-    const filterProjectMember = projectMember.filter(
-      (member) => member.userId !== id
-    );
-    setProjectMember(filterProjectMember);
-  };
-
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
     try {
-      let targetId = projectId;
+      const projectPayload = {
+        project_name: projectData.projectName,
+        type: projectData.type,
+        status: projectData.status,
+        started_at: projectData.startedAt?.toISOString().split("T")[0],
+        ended_at: projectData.endedAt?.toISOString().split("T")[0],
+        tech_stack: projectData.techStack,
+        description: projectData.description,
+      };
 
-      if (!targetId) {
-        const { data } = await createProject(projectData);
-        targetId = data?.[0]?.project_id;
+      if (!projectId) {
+        // 새 프로젝트 생성
+        createProject(projectPayload);
       } else {
-        await updateProject(targetId, projectData);
-      }
-
-      if (targetId) {
-        await updateProjectMember(targetId, projectMember);
+        // 기존 프로젝트 수정
+        updateProject(projectId, projectPayload);
       }
 
       showToast("저장되었습니다.", "success");
@@ -319,64 +223,6 @@ export default function ProjectForm() {
             onChange={handleChange}
           />
         </div>
-        <div className="py-3">
-          <Label className="mb-4 font-bold text-lg">프로젝트 구성원</Label>
-          <div className="pb-4">
-            <ComboBox
-              items={userList}
-              value={user}
-              setValue={setUser}
-              onChange={handleAddProjectMember}
-            />
-          </div>
-        </div>
-
-        {projectMember.map((member, index) => {
-          return (
-            <div className="flex pb-6" key={index}>
-              <div className="flex items-center w-full">
-                <div className="border-1 rounded-full p-3 mr-5 border-gray-100 dark:border-gray-500">
-                  <Icon
-                    type="userCircle"
-                    className="
-                      text-gray-700
-                      dark:text-gray-200"
-                  />
-                </div>
-                <div>
-                  <div>{member.userName}</div>
-                  <div className="flex justify-center items-center">
-                    <div className="mr-2">{member.email} -</div>
-                    <div>
-                      <RoleSelect
-                        value={member.role}
-                        onValueChange={(value) =>
-                          handleRoleSelectChange(index, value)
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <Button
-                  btnType="icon"
-                  icon="trash"
-                  size={16}
-                  className="
-                    hover:bg-red-100/40
-                    hover:border-red-100/40
-                    text-red-100
-                    dark:text-red-100/80!
-                    dark:bg-gray-700!
-                    dark:border-gray-500!
-                    dark:hover:bg-gray-100/40!"
-                  onClick={() => handleDeleteProjectMember(member.userId)}
-                />
-              </div>
-            </div>
-          );
-        })}
 
         <div className="py-2 justify-self-center absolute bottom-5 left-1/2 transform -translate-x-1/2">
           <Button

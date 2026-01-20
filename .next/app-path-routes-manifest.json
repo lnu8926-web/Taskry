@@ -1,0 +1,10 @@
+{
+  "/(main)/project/create/page": "/project/create",
+  "/(main)/project/dashboard/page": "/project/dashboard",
+  "/(main)/project/update/[id]/page": "/project/update/[id]",
+  "/(main)/project/update/page": "/project/update",
+  "/(main)/project/workspace/page": "/project/workspace",
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/page": "/"
+}
