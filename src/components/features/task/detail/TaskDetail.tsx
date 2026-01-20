@@ -20,7 +20,7 @@ import { SubtaskSection } from "@/components/features/task/shared/SubtaskSection
 import { AssigneeField } from "@/components/features/task/fields/AssigneeField"; // 담당자 선택
 
 // 타입 정의
-import { Task } from "@/types/kanban";
+import { Task, Subtask } from "@/types/kanban";
 
 // ============================================
 // 🛠️ 유틸리티 함수들
@@ -132,7 +132,7 @@ export default function TaskDetail({
   const [editedTask, setEditedTask] = useState<Task>(initialTask); // 편집 중인 Task 데이터
   const [editingField, setEditingField] = useState<string | null>(null); // 현재 편집 중인 필드
   const [isLoadingMembers, setIsLoadingMembers] = useState(false); // 멤버 로딩 상태
-  const [isLoadingAssignee, setIsLoadingAssignee] = useState(false); // assignee 보강 로딩 상태
+  const [isLoadingAssignee] = useState(false); // assignee 보강 로딩 상태
   const [members, setMembers] = useState<ProjectMember[] | null>(null); // 프로젝트 멤버 목록
   const { openModal, modalProps } = useModal(); // 삭제 확인 모달 관리
 
@@ -245,7 +245,10 @@ export default function TaskDetail({
     );
   };
 
-  const handleChange = (field: keyof Task, value: string | boolean | null) => {
+  const handleChange = (
+    field: keyof Task,
+    value: string | boolean | null | Subtask[],
+  ) => {
     setEditedTask((prev) => {
       const newData = { ...prev, [field]: value };
 
@@ -268,7 +271,8 @@ export default function TaskDetail({
       // 시간을 모두 지우면 use_time을 false로 설정
       if (
         (field === "start_time" || field === "end_time") &&
-        (!value || !value.toString().trim())
+        typeof value === "string" &&
+        !value.trim()
       ) {
         const otherTimeField =
           field === "start_time" ? newData.end_time : newData.start_time;
@@ -617,7 +621,7 @@ function TitleField({
     return (
       <input
         type="text"
-        value={value}
+        value={value ?? ""}
         onChange={(e) => onChange(e.target.value)}
         onBlur={onBlur}
         onKeyDown={(e) => {

@@ -50,10 +50,12 @@ type ProjectMember = {
   user_id: string;
   role: string;
   users: {
-    id: string;
-    name: string;
+    id?: string;
+    name?: string;
+    user_name?: string;
     email: string;
-    avatar_url: string;
+    avatar_url?: string;
+    profile_image?: string;
   };
 };
 
@@ -168,7 +170,8 @@ export default function TaskAdd({
       // 시간을 모두 지우면 use_time을 false로 설정
       if (
         (field === "start_time" || field === "end_time") &&
-        (!value || !value.trim())
+        typeof value === "string" &&
+        !value.trim()
       ) {
         const otherTimeField =
           field === "start_time" ? newData.end_time : newData.start_time;
@@ -231,26 +234,23 @@ export default function TaskAdd({
     setIsSubmitting(true);
 
     try {
-      // 입력된 날짜+시간을 UTC 기준으로 저장
-      const toUTCString = (dateStr: string, timeStr?: string) => {
-        // 사용자 입력 시간을 UTC로 직접 변환 (시간대 보정 없이)
-        const [year, month, day] = dateStr.split("-");
-        const [hour, minute] = (timeStr || "00:00").split(":");
-
-        const utcDate = new Date(
-          Date.UTC(
-            parseInt(year),
-            parseInt(month) - 1,
-            parseInt(day),
-            parseInt(hour),
-            parseInt(minute),
-            0,
-            0,
-          ),
-        );
-
-        return utcDate.toISOString();
-      };
+      // 입력된 날짜+시간을 UTC 기준으로 저장 (현재 미사용, 추후 사용 예정)
+      // const toUTCString = (dateStr: string, timeStr?: string) => {
+      //   const [year, month, day] = dateStr.split("-");
+      //   const [hour, minute] = (timeStr || "00:00").split(":");
+      //   const utcDate = new Date(
+      //     Date.UTC(
+      //       parseInt(year),
+      //       parseInt(month) - 1,
+      //       parseInt(day),
+      //       parseInt(hour),
+      //       parseInt(minute),
+      //       0,
+      //       0,
+      //     ),
+      //   );
+      //   return utcDate.toISOString();
+      // };
 
       // ✅ 날짜는 항상 자정(00:00:00)으로 저장
       // ✅ 실제 시간은 start_time/end_time 컬럼에 별도 저장

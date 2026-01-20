@@ -48,7 +48,8 @@ export const badgeConfigs = {
   },
 };
 
-const PriorityDot = ({ color }: { color: string }) => {
+const PriorityDot = ({ color }: { color?: string }) => {
+  if (!color) return null;
   return (
     <span
       className={`w-2 h-2 inline-block mr-1 rounded-full ${color}`}

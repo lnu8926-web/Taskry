@@ -26,11 +26,13 @@ export function StatusPrioritySection({
   priority,
   onStatusChange,
   onPriorityChange,
+  disabled = false,
 }: {
   status: TaskStatus;
   priority: TaskPriority;
   onStatusChange: (value: TaskStatus) => void;
   onPriorityChange: (value: TaskPriority) => void;
+  disabled?: boolean;
 }) {
   return (
     <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
@@ -48,6 +50,7 @@ export function StatusPrioritySection({
           value={status}
           options={STATUS_OPTIONS}
           onChange={onStatusChange}
+          disabled={disabled}
         />
       </div>
 
@@ -65,6 +68,7 @@ export function StatusPrioritySection({
           value={priority}
           options={PRIORITY_OPTIONS}
           onChange={onPriorityChange}
+          disabled={disabled}
         />
       </div>
     </div>

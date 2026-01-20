@@ -35,13 +35,23 @@ export default function Modal({
   buttonDisabled,
   children,
 }: ModalProps) {
-  const config = type
-    ? modalConfigs[type as keyof typeof modalConfigs]
-    : ({} as Partial<(typeof modalConfigs)[keyof typeof modalConfigs]>);
+  const config = type ? modalConfigs[type as keyof typeof modalConfigs] : null;
+
+  // 타입 가드: config가 size 설정인지 모달 설정인지 확인
+  const isModalConfig = config && "title" in config;
+
+  // 타입 안전하게 config 속성에 접근하기 위한 헬퍼 함수
+  const getConfigValue = <K extends string>(key: K) => {
+    if (!isModalConfig || !(key in config)) return undefined;
+    return (config as Record<string, unknown>)[key];
+  };
+
   // prop으로 전달받은 title, description이 있다면 사용하고, 없으면 config 값 사용
-  const finalTitle = title ?? config.title;
-  const finalDescription = description ?? config.description;
-  const finalWarning = warning ?? config.warning;
+  const finalTitle = title ?? (isModalConfig ? config.title : undefined);
+  const finalDescription =
+    description ?? (isModalConfig ? config.description : undefined);
+  const finalWarning =
+    warning ?? (getConfigValue("warning") as string | null | undefined);
 
   // 성공 타입은 5초 자동 닫힘
   useEffect(() => {
@@ -52,6 +62,7 @@ export default function Modal({
 
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [type, onClose]);
 
   // body 스크롤 방지
@@ -88,7 +99,7 @@ export default function Modal({
       />
       <div className={modalInnerClasses}>
         {/* 모달 아이콘 */}
-        {config?.icon && (
+        {isModalConfig && config.icon && (
           <div className={modalIconClasses}>
             <Icon
               type={config.icon}
@@ -124,10 +135,11 @@ export default function Modal({
                 </p>
               )}
 
-              {config?.info && (
+              {isModalConfig && config.info && (
                 <p
                   className={`text-sm font-medium mt-5 ${
-                    config.infoColor || "text-gray-600 dark:text-gray-400"
+                    ("infoColor" in config && config.infoColor) ||
+                    "text-gray-600 dark:text-gray-400"
                   }`}
                 >
                   {config.info}
@@ -138,25 +150,40 @@ export default function Modal({
         </div>
 
         {/* 버튼 */}
-        {(config?.buttonCancelText || config?.buttonConfirmText) && (
-          <div className="flex gap-3 justify-center mt-6">
-            {config?.buttonCancelText && (
-              <Button btnType="basic" variant="basic" onClick={onClose}>
-                {config.buttonCancelText}
-              </Button>
-            )}
-            {config?.buttonConfirmText && (
-              <Button
-                btnType="basic"
-                variant="warning"
-                onClick={onConfirm}
-                disabled={buttonDisabled ?? config.buttonDisabled}
-              >
-                {config.buttonConfirmText}
-              </Button>
-            )}
-          </div>
-        )}
+        {isModalConfig &&
+          (() => {
+            const cancelText = getConfigValue("buttonCancelText") as
+              | string
+              | undefined;
+            const confirmText = getConfigValue("buttonConfirmText") as
+              | string
+              | undefined;
+            const isDisabled = getConfigValue("buttonDisabled") as
+              | boolean
+              | undefined;
+
+            if (!cancelText && !confirmText) return null;
+
+            return (
+              <div className="flex gap-3 justify-center mt-6">
+                {cancelText && (
+                  <Button btnType="basic" variant="basic" onClick={onClose}>
+                    {cancelText}
+                  </Button>
+                )}
+                {confirmText && (
+                  <Button
+                    btnType="basic"
+                    variant="warning"
+                    onClick={onConfirm}
+                    disabled={buttonDisabled ?? isDisabled}
+                  >
+                    {confirmText}
+                  </Button>
+                )}
+              </div>
+            );
+          })()}
       </div>
     </div>
   );

@@ -11,22 +11,14 @@ import { DeleteDialog } from "./DeleteDialog";
 import { deleteProject } from "@/lib/local";
 import { useRouter } from "next/navigation";
 import { showToast } from "@/lib/utils/toast";
+import { Project } from "@/types";
+
+// ProjectBoardBody에서 전달되는 확장된 Project 타입
+type ExtendedProject = Project & { projectId: string; projectName: string };
 
 interface ProjectCardProps {
-  project: {
-    project_id: string;
-    projectName: string;
-    description: string;
-  };
-  setProjectList: React.Dispatch<
-    React.SetStateAction<
-      {
-        project_id: string;
-        projectName: string;
-        description: string;
-      }[]
-    >
-  >;
+  project: ExtendedProject;
+  setProjectList: React.Dispatch<React.SetStateAction<ExtendedProject[]>>;
 }
 
 export default function ProjectCard({
