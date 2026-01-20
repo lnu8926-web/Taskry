@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import Button from "@/components/ui/Button"; // 공통 버튼 컴포넌트
 import { Icon } from "@/components/shared/Icon"; // 아이콘 컴포넌트
 import { showToast } from "@/lib/utils/toast"; // 토스트 알림
-import { TASK_MESSAGES } from "@/lib/constants/messages"; // 메시지 상수
+import { TASK_MESSAGES } from "@/lib/constants"; // 메시지 상수
 import { useModal } from "@/hooks/useModal"; // 모달 상태 관리 훅
 import Modal from "@/components/ui/Modal"; // 모달 컴포넌트
 
