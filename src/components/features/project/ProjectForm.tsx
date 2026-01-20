@@ -12,11 +12,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ProjectDateCard from "./ProjectDateCard";
 import Container from "@/components/shared/Container";
-import {
-  createProject,
-  getProjectById,
-  updateProject,
-} from "@/lib/local";
+import { createProject, getProjectById, updateProject } from "@/lib/local";
 import { ProjectStatus } from "@/types/project";
 
 interface ProjectProps {
@@ -33,7 +29,12 @@ interface ProjectProps {
 
 export default function ProjectForm() {
   const router = useRouter();
-  const [projectId, setProjectId] = useState<string>("");
+  const [projectId] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("current_Project_Id") || "";
+    }
+    return "";
+  });
   const [projectData, setProjectData] = useState<ProjectProps>({
     projectName: "",
     type: "",
@@ -45,14 +46,6 @@ export default function ProjectForm() {
     techStack: "",
     description: "",
   });
-
-  useEffect(() => {
-    const storedProjectId = sessionStorage.getItem("current_Project_Id");
-
-    if (storedProjectId) {
-      setProjectId(storedProjectId);
-    }
-  }, [router]);
 
   useEffect(() => {
     const fetchData = () => {
@@ -68,10 +61,16 @@ export default function ProjectForm() {
           projectName: project.project_name,
           type: project.type || "",
           status: project.status || "",
-          startedAt: project.started_at ? new Date(project.started_at) : undefined,
+          startedAt: project.started_at
+            ? new Date(project.started_at)
+            : undefined,
           endedAt: project.ended_at ? new Date(project.ended_at) : undefined,
-          createdAt: project.created_at ? new Date(project.created_at) : undefined,
-          updatedAt: project.updated_at ? new Date(project.updated_at) : undefined,
+          createdAt: project.created_at
+            ? new Date(project.created_at)
+            : undefined,
+          updatedAt: project.updated_at
+            ? new Date(project.updated_at)
+            : undefined,
           techStack: project.tech_stack || "",
           description: project.description || "",
         });
@@ -81,7 +80,9 @@ export default function ProjectForm() {
   }, [projectId]);
 
   // 일반 Input과 Textarea를 위한 handleChange
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = event.target;
     setProjectData((prevProjectData) => ({
       ...prevProjectData,
@@ -160,7 +161,7 @@ export default function ProjectForm() {
             onChange={handleChange}
           />
         </div>
-        <div className="flex py-3 grid grid-cols-2 gap-4">
+        <div className="py-3 grid grid-cols-2 gap-4">
           <div>
             <Label className="mb-4 font-bold text-lg">프로젝트 분류</Label>
             <TypeSelect
@@ -180,7 +181,7 @@ export default function ProjectForm() {
             />
           </div>
         </div>
-        <div className="flex py-3 grid grid-cols-2 gap-4">
+        <div className="py-3 grid grid-cols-2 gap-4">
           <div>
             <Label className="mb-4 font-bold text-lg">프로젝트 시작일</Label>
             <Calendar22
