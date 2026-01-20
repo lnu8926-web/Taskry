@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 // 메인 기능 컴포넌트들
 import CalendarView from "@/components/features/calendarView/CalendarView";
 import KanbanBoard from "@/components/features/kanban/KanbanBoard";
-import BottomNavigation from "@/components/layout/BottomNavigation";
 
 // 타입 정의 및 유틸리티
 import { Task } from "@/types/kanban";
@@ -262,14 +261,6 @@ export default function ProjectPage() {
         >
           <MemoView projectId={projectId} />
         </aside>
-      </div>
-
-      {/* 하단 네비게이션 */}
-      <div className="shrink-0">
-        <BottomNavigation
-          activeView={showMemoPanel ? "memo" : currentView}
-          onViewChange={handleViewChange}
-        />
       </div>
     </div>
   );
