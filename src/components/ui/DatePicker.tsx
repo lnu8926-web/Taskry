@@ -38,7 +38,7 @@ export default function DatePicker({
   const [showCalendar, setShowCalendar] = useState(false);
   const [calendarPos, setCalendarPos] = useState({ top: 0, left: 0 });
   const [activeStartDate, setActiveStartDate] = useState<Date>(() =>
-    value ? stringToLocalDate(value) : new Date()
+    value ? stringToLocalDate(value) : new Date(),
   );
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
 
@@ -127,7 +127,7 @@ export default function DatePicker({
   };
 
   /** 📌 날짜 선택 */
-  const handleDateChange = (selected: any) => {
+  const handleDateChange = (selected: Date) => {
     if (!(selected instanceof Date)) return;
 
     const y = selected.getFullYear();
@@ -181,8 +181,8 @@ export default function DatePicker({
               error
                 ? "border-red-500"
                 : showCalendar
-                ? "border-main-400 ring-2 ring-main-400/20"
-                : "border-gray-300 dark:border-gray-600"
+                  ? "border-main-400 ring-2 ring-main-400/20"
+                  : "border-gray-300 dark:border-gray-600"
             }
             hover:border-gray-400 dark:hover:border-gray-500
           `}
@@ -246,7 +246,7 @@ export default function DatePicker({
               </div>
             )}
           </div>,
-          document.body
+          document.body,
         )}
     </div>
   );

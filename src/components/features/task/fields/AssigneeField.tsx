@@ -17,7 +17,15 @@ interface AssigneeFieldProps {
   // 편집 모드 props (TaskDetail용)
   isEditing?: boolean;
   isLoading?: boolean;
-  members?: any;
+  members?: Array<{
+    user_id: string;
+    role: string;
+    users: {
+      user_name: string;
+      email: string;
+      profile_image?: string;
+    };
+  }>;
   onEdit?: () => void;
   onBlur?: () => void;
   onCancel?: () => void;
@@ -50,10 +58,10 @@ export function AssigneeField({
   const [searchTerm, setSearchTerm] = useState("");
 
   // 선택된 멤버 처리
-  const selectedMember = members?.find((m: any) => m.user_id === value);
+  const selectedMember = members?.find((m) => m.user_id === value);
 
   // 입력값에 따른 멤버 필터링
-  const filteredMembers = (members || []).filter((member: any) => {
+  const filteredMembers = (members || []).filter((member) => {
     if (!searchTerm) return true; // 검색어가 없으면 전체 표시
 
     const searchLower = searchTerm.toLowerCase();
@@ -160,7 +168,7 @@ export function AssigneeField({
           <input
             type="text"
             value={searchTerm || ""}
-            onChange={(e: any) => {
+            onChange={(e) => {
               const inputValue = e.target.value;
               setSearchTerm(inputValue);
               setIsOpen(true);
@@ -177,11 +185,11 @@ export function AssigneeField({
               setTimeout(() => setIsOpen(false), 200);
               onBlur?.();
             }}
-            onKeyDown={(e: any) => {
+            onKeyDown={(e) => {
               if (e.key === "Enter" && filteredMembers.length > 0) {
                 handleSelectMember(
                   filteredMembers[0].user_id,
-                  filteredMembers[0].users.user_name
+                  filteredMembers[0].users.user_name,
                 );
               }
               if (e.key === "Escape") {
@@ -217,14 +225,14 @@ export function AssigneeField({
             {/* 드롭다운 목록 - 3명부터 스크롤 */}
             {!isLoading && filteredMembers.length > 0 && (
               <div className="border border-gray-200 dark:border-gray-600 rounded-lg max-h-[120px] overflow-y-auto bg-white dark:bg-gray-800 shadow-lg">
-                {filteredMembers.map((member: any) => (
+                {filteredMembers.map((member) => (
                   <div
                     key={member.user_id}
                     onMouseDown={(e) => {
                       e.preventDefault();
                       handleSelectMember(
                         member.user_id,
-                        member.users.user_name
+                        member.users.user_name,
                       );
                     }}
                     className="flex items-center gap-3 px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"

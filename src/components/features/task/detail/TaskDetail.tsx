@@ -162,7 +162,7 @@ export default function TaskDetail({
       try {
         // 🌐 API 호출: 프로젝트 멤버 목록 요청
         const response = await fetch(
-          `/api/projectMembers/forAssignment?projectId=${task.project_id}`
+          `/api/projectMembers/forAssignment?projectId=${task.project_id}`,
         );
 
         // 🚑 HTTP 에러 처리
@@ -170,7 +170,7 @@ export default function TaskDetail({
           const errorData = await response.json().catch(() => ({}));
           throw new Error(
             errorData.error ||
-              `HTTP ${response.status}: 프로젝트 멤버를 불러오는 데 실패했습니다.`
+              `HTTP ${response.status}: 프로젝트 멤버를 불러오는 데 실패했습니다.`,
           );
         }
 
@@ -245,7 +245,7 @@ export default function TaskDetail({
     );
   };
 
-  const handleChange = (field: keyof Task, value: any) => {
+  const handleChange = (field: keyof Task, value: string | boolean | null) => {
     setEditedTask((prev) => {
       const newData = { ...prev, [field]: value };
 
@@ -268,13 +268,13 @@ export default function TaskDetail({
       // 시간을 모두 지우면 use_time을 false로 설정
       if (
         (field === "start_time" || field === "end_time") &&
-        (!value || !value.trim())
+        (!value || !value.toString().trim())
       ) {
         const otherTimeField =
           field === "start_time" ? newData.end_time : newData.start_time;
         if (!otherTimeField || !otherTimeField.trim()) {
           console.log(
-            `⏰ TaskDetail 시간 모두 삭제됨, use_time을 false로 설정`
+            `⏰ TaskDetail 시간 모두 삭제됨, use_time을 false로 설정`,
           );
           newData.use_time = false;
         }
@@ -316,9 +316,9 @@ export default function TaskDetail({
 
       // 불필요한 필드 제거 (DB에 없는 컬럼들)
       const filteredUpdates = { ...updates };
-      delete (filteredUpdates as any).id;
-      delete (filteredUpdates as any).created_at;
-      delete (filteredUpdates as any).kanban_boards;
+      delete (filteredUpdates as Partial<Task>).id;
+      delete (filteredUpdates as Partial<Task>).created_at;
+      delete (filteredUpdates as Partial<Task>).kanban_board_id;
 
       await onUpdate?.(task.id, filteredUpdates);
       showToast("작업이 저장되었습니다.", "success");
@@ -345,7 +345,7 @@ export default function TaskDetail({
       openModal(
         "deleteSuccess",
         "작업 삭제 완료",
-        "선택한 작업이 삭제되었습니다."
+        "선택한 작업이 삭제되었습니다.",
       );
 
       // 5초 후 자동으로 모달 닫기 (deleteSuccess 모달은 자동 닫힘)
@@ -573,6 +573,28 @@ function Header({
   );
 }
 
+// ============================================
+// 내부 컴포넌트 Props 타입 정의
+// ============================================
+
+interface EditableFieldProps {
+  value: string | null | undefined;
+  isEditing: boolean;
+  isProjectEnded?: boolean;
+  onEdit: () => void;
+  onChange: (value: string) => void;
+  onBlur: () => void;
+  onCancel: () => void;
+}
+
+interface ActionButtonsProps {
+  hasChanges: boolean;
+  isProjectEnded: boolean;
+  onCancel: () => void;
+  onSave: () => void;
+  onDelete: () => void;
+}
+
 /**
  * 📝 TitleField 컴포넌트 - 인라인 편집 가능한 제목 필드
  *
@@ -590,7 +612,7 @@ function TitleField({
   onChange, // 🔄 값 변경 핸들러
   onBlur, // 👁️ 포커스 이탈 핸들러
   onCancel, // ❌ 취소 핸들러
-}: any) {
+}: EditableFieldProps) {
   if (isEditing) {
     return (
       <input
@@ -630,7 +652,7 @@ function DescriptionField({
   onChange,
   onBlur,
   onCancel,
-}: any) {
+}: EditableFieldProps) {
   return isEditing ? (
     <textarea
       value={value || ""}
@@ -663,7 +685,7 @@ function MemoField({
   onChange,
   onBlur,
   onCancel,
-}: any) {
+}: EditableFieldProps) {
   if (isEditing) {
     return (
       <textarea
@@ -704,7 +726,7 @@ function ActionButtons({
   onCancel,
   onSave,
   onDelete,
-}: any) {
+}: ActionButtonsProps) {
   return (
     <div className="flex justify-between">
       {/* 삭제 */}

@@ -8,7 +8,7 @@ export type Notice = {
   announcement_id: string; // (int8)
   user_id: string | null; // (uuid)
   title: string; // (varchar(255))
-  content: string; // (text: any)
+  content: string; // (text)
   is_important: boolean; // (default false) -> 중요 공지
   created_at: string; // (timestamp)
   updated_at: string; // (timestamp)

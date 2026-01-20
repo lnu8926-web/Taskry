@@ -45,11 +45,17 @@ const AssigneeInfo = ({ userId, projectId }: AssigneeInfoProps) => {
 
       try {
         const response = await fetch(
-          `/api/projectMembers/forAssignment?projectId=${projectId}`
+          `/api/projectMembers/forAssignment?projectId=${projectId}`,
         );
         if (!response.ok) throw new Error("Failed to fetch user info");
         const result = await response.json();
-        const member = result.data?.find((m: any) => m.user_id === userId);
+        const member = result.data?.find(
+          (m: {
+            user_id: string;
+            users: { user_name: string; email: string; profile_image?: string };
+            role: string;
+          }) => m.user_id === userId,
+        );
         if (member) {
           setUserInfo({
             user_id: member.user_id,

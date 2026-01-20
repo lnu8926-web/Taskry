@@ -7,12 +7,15 @@ import Container from "@/components/shared/Container";
 import ProjectBoardEmpty from "./ProjectBoardEmpty";
 import ProjectCard from "./ProjectCard";
 import CommonPagination from "@/components/ui/CommonPagination";
+import { Project } from "@/types";
 
 export default function ProjectBoard() {
   const { filter } = useProjectBoard();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [projectList, setProjectList] = useState<any[]>([]);
+  const [projectList, setProjectList] = useState<
+    (Project & { projectId: string; projectName: string })[]
+  >([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
@@ -21,24 +24,27 @@ export default function ProjectBoard() {
   const fetchAllData = useCallback(() => {
     try {
       setIsLoading(true);
-      
+
       // 로컬 서비스에서 프로젝트 조회
       const projects = getProjects();
-      
+
       const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE) || 1;
       setTotalPage(totalPages);
 
       // 페이지네이션 적용
       const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-      const paginatedProjects = projects.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-      
+      const paginatedProjects = projects.slice(
+        startIndex,
+        startIndex + ITEMS_PER_PAGE,
+      );
+
       // 프로젝트 목록 가공
       const formattedProjects = paginatedProjects.map((project) => ({
         ...project,
         projectId: project.project_id,
         projectName: project.project_name,
       }));
-      
+
       setProjectList(formattedProjects);
     } catch (err) {
       console.error(err);
@@ -69,8 +75,12 @@ export default function ProjectBoard() {
     const isAsc = filter.sort === "asc";
 
     return [...projectList].sort((a, b) => {
-      const timeA = new Date((a as any)[targetKey]).getTime();
-      const timeB = new Date((b as any)[targetKey]).getTime();
+      const timeA = new Date(
+        a[targetKey as keyof typeof a] as string,
+      ).getTime();
+      const timeB = new Date(
+        b[targetKey as keyof typeof b] as string,
+      ).getTime();
       return isAsc ? timeA - timeB : timeB - timeA;
     });
   }, [projectList, filter.date, filter.sort]);

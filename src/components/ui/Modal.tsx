@@ -10,18 +10,18 @@ import { modalConfigs } from "@/config/modalConfigs";
 const modalClasses = clsx(
   "fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-40",
   "w-full h-full",
-  "flex items-center"
+  "flex items-center",
 );
 
 const modalInnerClasses = clsx(
   "relative m-auto w-xl min-h-68 py-9 px-7",
   "flex flex-col items-center justify-center",
-  "border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm bg-white dark:bg-gray-800"
+  "border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm bg-white dark:bg-gray-800",
 );
 const modalIconClasses = clsx(
   "size-15 flex items-center justify-center",
   "absolute -top-8 left-1/2 transform -translate-x-1/2",
-  "shadow-lg rounded-full bg-white dark:bg-gray-800"
+  "shadow-lg rounded-full bg-white dark:bg-gray-800",
 );
 
 export default function Modal({
@@ -35,10 +35,9 @@ export default function Modal({
   buttonDisabled,
   children,
 }: ModalProps) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const config = type
     ? modalConfigs[type as keyof typeof modalConfigs]
-    : ({} as any);
+    : ({} as Partial<(typeof modalConfigs)[keyof typeof modalConfigs]>);
   // prop으로 전달받은 title, description이 있다면 사용하고, 없으면 config 값 사용
   const finalTitle = title ?? config.title;
   const finalDescription = description ?? config.description;

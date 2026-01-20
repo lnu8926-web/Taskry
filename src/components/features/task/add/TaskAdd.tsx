@@ -120,7 +120,7 @@ export default function TaskAdd({
       setIsLoadingMembers(true);
       try {
         const response = await fetch(
-          `/api/projectMembers/forAssignment?projectId=${projectId}`
+          `/api/projectMembers/forAssignment?projectId=${projectId}`,
         );
         if (!response.ok) {
           throw new Error("프로젝트 멤버를 불러오는 데 실패했습니다.");
@@ -140,7 +140,10 @@ export default function TaskAdd({
     fetchMember();
   }, [projectId]);
 
-  const handleChange = (field: keyof FormData, value: any) => {
+  const handleChange = (
+    field: keyof FormData,
+    value: FormData[keyof FormData],
+  ) => {
     setFormData((prev) => {
       const newData = { ...prev, [field]: value };
 
@@ -242,8 +245,8 @@ export default function TaskAdd({
             parseInt(hour),
             parseInt(minute),
             0,
-            0
-          )
+            0,
+          ),
         );
 
         return utcDate.toISOString();
@@ -413,8 +416,8 @@ export default function TaskAdd({
           {isSubmitting
             ? "생성 중..."
             : isProjectEnded
-            ? "프로젝트 종료됨"
-            : "작업 추가"}
+              ? "프로젝트 종료됨"
+              : "작업 추가"}
         </Button>
       </div>
     </div>

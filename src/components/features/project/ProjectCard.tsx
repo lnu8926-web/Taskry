@@ -13,8 +13,20 @@ import { useRouter } from "next/navigation";
 import { showToast } from "@/lib/utils/toast";
 
 interface ProjectCardProps {
-  project: any;
-  setProjectList: React.Dispatch<React.SetStateAction<any[]>>;
+  project: {
+    project_id: string;
+    projectName: string;
+    description: string;
+  };
+  setProjectList: React.Dispatch<
+    React.SetStateAction<
+      {
+        project_id: string;
+        projectName: string;
+        description: string;
+      }[]
+    >
+  >;
 }
 
 export default function ProjectCard({
@@ -39,7 +51,7 @@ export default function ProjectCard({
 
     // UI에서 해당 프로젝트 제거
     setProjectList((prevList) =>
-      prevList.filter((project) => project.projectId !== id)
+      prevList.filter((project) => project.project_id !== id),
     );
 
     showToast("삭제되었습니다.", "deleted");
@@ -65,18 +77,18 @@ export default function ProjectCard({
         {/* 팀원 수 표시 제거 (1인 프로젝트) */}
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        <div onClick={(e: any) => e.stopPropagation()}>
+        <div onClick={(e: React.MouseEvent) => e.stopPropagation()}>
           <Button
             btnType="icon"
             icon="edit"
             size={16}
             variant="primary"
-            onClick={() => handleEditProject(project.projectId)}
+            onClick={() => handleEditProject(project.project_id)}
           />
         </div>
-        <div onClick={(e: any) => e.stopPropagation()}>
+        <div onClick={(e: React.MouseEvent) => e.stopPropagation()}>
           <DeleteDialog
-            onClick={() => handleDeleteProject(project.projectId)}
+            onClick={() => handleDeleteProject(project.project_id)}
           />
         </div>
       </CardFooter>
