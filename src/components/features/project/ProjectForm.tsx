@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@/components/ui/Button";
-import { Calendar22 } from "@/components/features/project/Calendar";
+import { ProjectDatePicker } from "@/components/features/project/Calendar";
 import { StatusSelect } from "@/components/features/project/StatusSelect";
 import { TypeSelect } from "@/components/features/project/TypeSelect";
 import { Input } from "@/components/ui/shadcn/Input";
@@ -184,7 +184,7 @@ export default function ProjectForm() {
         <div className="py-3 grid grid-cols-2 gap-4">
           <div>
             <Label className="mb-4 font-bold text-lg">프로젝트 시작일</Label>
-            <Calendar22
+            <ProjectDatePicker
               value={projectData.startedAt}
               onValueChange={(value) => {
                 handleDateChange("startedAt", value);
@@ -193,7 +193,7 @@ export default function ProjectForm() {
           </div>
           <div>
             <Label className="mb-4 font-bold text-lg">프로젝트 종료일</Label>
-            <Calendar22
+            <ProjectDatePicker
               value={projectData.endedAt}
               onValueChange={(value) => {
                 handleDateChange("endedAt", value);

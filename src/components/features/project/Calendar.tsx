@@ -13,17 +13,17 @@ import {
 } from "@/components/ui/shadcn/Popover";
 import { format } from "date-fns";
 
-interface Calendar22Props {
+interface ProjectDatePickerProps {
   value?: Date; // 외부에서 주입될 날짜 값
   onValueChange?: (date: Date | undefined) => void; // 외부로 날짜 변경을 알릴 함수
   placeholder?: string; // 플레이스홀더 텍스트
 }
 
-export function Calendar22({
+export function ProjectDatePicker({
   value,
   onValueChange,
   placeholder = "Select Date",
-}: Calendar22Props) {
+}: ProjectDatePickerProps) {
   const [open, setOpen] = React.useState(false);
 
   const handleSelectDate = (selectedDate: Date | undefined) => {
