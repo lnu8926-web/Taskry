@@ -2,17 +2,13 @@
 
 import { Icon } from "@/components/shared/Icon";
 import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 
 export function Header() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [mounted] = useState(() => typeof window !== "undefined");
 
   return (
     <header
@@ -23,7 +19,7 @@ export function Header() {
         flex items-center justify-between 
         bg-bakground backdrop-blur-md"
     >
-      <div className="w-full max-w-[1280px] px-10 mx-auto flex justify-between">
+      <div className="w-full max-w-7xl px-10 mx-auto flex justify-between">
         <Link href="/" className="flex items-center gap-2">
           <Icon
             type="board"

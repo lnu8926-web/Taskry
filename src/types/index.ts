@@ -4,13 +4,26 @@
  */
 
 // 칸반 관련 타입
-export type { Task, Subtask, TaskStatus, TaskPriority, KanbanBoardType, Column } from "./kanban";
+export type {
+  Task,
+  Subtask,
+  TaskStatus,
+  TaskPriority,
+  KanbanBoardType,
+  Column,
+} from "./kanban";
 
 // 사용자 관련 타입
 export type { User, UserRole, InsertUser, UpdateUser } from "./user";
 
 // 프로젝트 관련 타입
-export type { Project, ProjectStatus, ProjectRole, InsertProject, UpdateProject } from "./project";
+export type {
+  Project,
+  ProjectStatus,
+  ProjectRole,
+  InsertProject,
+  UpdateProject,
+} from "./project";
 
 // 프로젝트 멤버 타입
 export * from "./projectMember";

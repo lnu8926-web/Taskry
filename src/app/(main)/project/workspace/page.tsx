@@ -93,7 +93,7 @@ export default function ProjectPage() {
         }
 
         // 2. 칸반보드 가져오기 (없으면 생성)
-        let boards = getBoardsByProjectId(projectId);
+        const boards = getBoardsByProjectId(projectId);
         let boardId = boards[0]?.id;
 
         if (!boardId) {
@@ -123,7 +123,7 @@ export default function ProjectPage() {
 
   // Task 생성 핸들러
   const handleCreateTask = (
-    taskData: Omit<Task, "id" | "created_at" | "updated_at">
+    taskData: Omit<Task, "id" | "created_at" | "updated_at">,
   ) => {
     const newTask = createTaskLocal(taskData);
     setTasks((prev) => [...prev, newTask]);
@@ -135,7 +135,7 @@ export default function ProjectPage() {
     const updated = updateTaskLocal(taskId, updates);
     if (updated) {
       setTasks((prev) =>
-        prev.map((t) => (t.id === taskId ? { ...t, ...updates } : t))
+        prev.map((t) => (t.id === taskId ? { ...t, ...updates } : t)),
       );
     }
   };
