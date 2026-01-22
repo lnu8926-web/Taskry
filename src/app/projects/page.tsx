@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Plus, FolderOpen } from "lucide-react";
@@ -10,19 +10,14 @@ import { Project } from "@/types";
 
 export default function ProjectsPage() {
   const router = useRouter();
-  const [projects, setProjects] = useState<Project[]>([]);
-
-  useEffect(() => {
-    const loadedProjects = getProjects();
-    setProjects(loadedProjects);
-  }, []);
+  const projects = useMemo<Project[]>(() => getProjects(), []);
 
   const handleSelectProject = (projectId: string) => {
-    router.push(`/project/${projectId}`);
+    router.push(`/projects/${projectId}`);
   };
 
   const handleCreateProject = () => {
-    router.push("/project/create");
+    router.push("/projects/create");
   };
 
   return (

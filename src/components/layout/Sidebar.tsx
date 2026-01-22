@@ -141,7 +141,7 @@ interface ProjectItemProps {
 function ProjectItem({ color, name }: ProjectItemProps) {
   return (
     <Link
-      href={`/project/${name.toLowerCase().replace(/\s/g, "-")}`}
+      href={`/projects/${name.toLowerCase().replace(/\s/g, "-")}`}
       className="flex items-center w-full px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
     >
       <span
