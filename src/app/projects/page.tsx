@@ -23,13 +23,23 @@ export default function ProjectsPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-4 pb-24 md:p-8">
       {/* 헤더 */}
-      <div className="mb-6">
-        <h1 className="text-xl md:text-2xl font-bold text-gray-900">
-          내 프로젝트
-        </h1>
-        <p className="text-sm text-gray-500 mt-1">
-          {projects.length}개의 프로젝트
-        </p>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">
+            내 프로젝트
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">
+            {projects.length}개의 프로젝트
+          </p>
+        </div>
+        <button
+          onClick={handleCreateProject}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-white font-medium transition-colors hover:opacity-90"
+          style={{ backgroundColor: MIST.DARKEST }}
+        >
+          <Plus className="w-5 h-5" />
+          <span className="hidden sm:inline">새 프로젝트</span>
+        </button>
       </div>
 
       {/* 프로젝트 목록 */}

@@ -239,7 +239,9 @@ export default function CreateProjectPage() {
                   <h3 className="font-semibold text-gray-900 mb-0.5">
                     {template.name}
                   </h3>
-                  <p className="text-xs text-gray-500">{template.description}</p>
+                  <p className="text-xs text-gray-500">
+                    {template.description}
+                  </p>
                 </motion.button>
               );
             })}
@@ -256,16 +258,16 @@ export default function CreateProjectPage() {
               >
                 <p className="text-xs text-gray-500 mb-2">기본 컬럼</p>
                 <div className="flex flex-wrap gap-2">
-                  {TEMPLATES.find((t) => t.id === selectedTemplate)?.defaultColumns.map(
-                    (col) => (
-                      <span
-                        key={col}
-                        className="px-3 py-1 bg-white rounded-lg text-sm text-gray-700 border border-gray-200"
-                      >
-                        {col}
-                      </span>
-                    )
-                  )}
+                  {TEMPLATES.find(
+                    (t) => t.id === selectedTemplate,
+                  )?.defaultColumns.map((col) => (
+                    <span
+                      key={col}
+                      className="px-3 py-1 bg-white rounded-lg text-sm text-gray-700 border border-gray-200"
+                    >
+                      {col}
+                    </span>
+                  ))}
                 </div>
               </motion.div>
             )}

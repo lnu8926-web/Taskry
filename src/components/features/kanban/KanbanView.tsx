@@ -13,11 +13,11 @@ import {
   Calendar,
   Grid,
   ChevronRight,
-  Menu,
   ArrowLeft,
 } from "lucide-react";
-import { MIST, COMPLEMENTARY } from "@/lib/constants";
+import { MIST } from "@/lib/constants";
 import { Task as TaskType } from "@/types/kanban";
+import TaskCreateModal from "@/components/features/task/TaskCreateModal";
 import { Project } from "@/types/project";
 
 // 칸반 뷰 Props
@@ -25,7 +25,6 @@ interface KanbanViewProps {
   project: Project;
   tasks: TaskType[];
   onBack?: () => void;
-  onCreateTask?: () => void;
   onOpenTask?: (task: TaskType) => void;
   onUpdateTaskStatus?: (taskId: string, newStatus: string) => void;
 }
@@ -56,7 +55,6 @@ export default function KanbanView({
   project,
   tasks,
   onBack,
-  onCreateTask,
   onOpenTask,
   onUpdateTaskStatus,
 }: KanbanViewProps) {
@@ -64,6 +62,10 @@ export default function KanbanView({
   const [isInfoPanelOpen, setIsInfoPanelOpen] = useState(false);
   const [draggingTask, setDraggingTask] = useState<TaskType | null>(null);
   const [draggingFrom, setDraggingFrom] = useState<string | null>(null);
+
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [createdTaskStatus, setCreatedTaskStatus] =
+    useState<ColumnStatus>("todo");
 
   // 태스크 상태별 그룹화
   const tasksByStatus = {
@@ -99,6 +101,11 @@ export default function KanbanView({
 
     setDraggingTask(null);
     setDraggingFrom(null);
+  };
+
+  const handleAddTaskClick = (status: ColumnStatus) => {
+    setCreatedTaskStatus(status);
+    setIsCreateModalOpen(true);
   };
 
   return (
@@ -237,7 +244,7 @@ export default function KanbanView({
                         </span>
                       </div>
                       <button
-                        onClick={onCreateTask}
+                        onClick={() => handleAddTaskClick(column.id)}
                         className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
                       >
                         <Plus size={16} className="text-gray-500" />
@@ -266,7 +273,7 @@ export default function KanbanView({
                   {/* 컬럼 푸터 */}
                   <div className="p-2 border-t border-gray-200">
                     <button
-                      onClick={onCreateTask}
+                      onClick={() => handleAddTaskClick(column.id)}
                       className="w-full p-2 flex items-center justify-center text-gray-500 hover:bg-gray-200 rounded-lg text-sm transition-colors"
                     >
                       <Plus size={16} className="mr-1" /> 태스크 추가
@@ -449,6 +456,18 @@ export default function KanbanView({
           </motion.div>
         </div>
       )}
+
+      {/* 태스크 생성 모달 */}
+      <TaskCreateModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        projectId={project.project_id}
+        boardId={`board-${project.project_id}`}
+        initialStatus={createdTaskStatus}
+        onSuccess={() => {
+          window.location.reload();
+        }}
+      />
     </div>
   );
 }
@@ -521,3 +540,5 @@ function TaskCard({ task, onDragStart, onClick }: TaskCardProps) {
     </motion.div>
   );
 }
+
+export { TaskCreateModal };
