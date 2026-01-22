@@ -81,8 +81,7 @@ function EmptyState({ onCreateProject }: { onCreateProject: () => void }) {
         className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-colors"
         style={{ backgroundColor: MIST.DEFAULT }}
       >
-        <Plus className="w-5 h-5" />
-        새 프로젝트 만들기
+        <Plus className="w-5 h-5" />새 프로젝트 만들기
       </button>
     </motion.div>
   );
@@ -125,16 +124,16 @@ function ProjectCard({
       />
 
       {/* 프로젝트 정보 */}
-      <h3 className="font-semibold text-gray-900 mb-1">{project.project_name}</h3>
+      <h3 className="font-semibold text-gray-900 mb-1">
+        {project.project_name}
+      </h3>
       <p className="text-sm text-gray-500 line-clamp-2 mb-3">
         {project.description || "설명 없음"}
       </p>
 
       {/* 메타 정보 */}
       <div className="flex items-center justify-between text-xs text-gray-400">
-        <span>
-          {new Date(project.created_at).toLocaleDateString("ko-KR")}
-        </span>
+        <span>{new Date(project.created_at).toLocaleDateString("ko-KR")}</span>
         <span
           className="px-2 py-1 rounded-full"
           style={{ backgroundColor: MIST.LIGHT, color: MIST.DARKEST }}

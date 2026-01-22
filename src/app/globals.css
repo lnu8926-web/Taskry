@@ -20,12 +20,12 @@
   [role="button"] {
     min-height: 44px;
   }
-  
+
   /* 터치 피드백 */
   .active\:scale-95:active {
     transform: scale(0.95);
   }
-  
+
   /* 스크롤 최적화 */
   .overflow-auto,
   .overflow-y-auto,
