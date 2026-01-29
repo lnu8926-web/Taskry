@@ -14,7 +14,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { MIST } from "@/lib/constants";
-import { createProject } from "@/lib/local";
+import { projectService, boardService } from "@/lib/supabase/services";
 import { showToast } from "@/lib/utils/toast";
 
 // 템플릿 정의
@@ -73,15 +73,19 @@ export default function CreateProjectPage() {
     try {
       const template = TEMPLATES.find((t) => t.id === selectedTemplate);
 
-      const newProject = createProject({
+      // Supabase에 프로젝트 생성
+      const newProject = await projectService.create({
         project_name: projectName,
         description: "",
         type: "개인",
         status: "active",
         tech_stack: template?.techStack || "",
         started_at: new Date().toISOString().split("T")[0],
-        ended_at: "",
+        ended_at: null,
       });
+
+      // 기본 칸반보드 생성
+      await boardService.createDefaultBoard(newProject.project_id);
 
       showToast("프로젝트가 생성되었습니다! 🎉", "success");
       router.push(`/projects/${newProject.project_id}`);
@@ -100,7 +104,7 @@ export default function CreateProjectPage() {
   const canSubmit = projectName.trim().length > 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
       {/* 헤더 */}
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-gray-100">
         <div className="flex items-center justify-between h-14 px-4 max-w-2xl mx-auto">
