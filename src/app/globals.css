@@ -12,13 +12,25 @@
   padding-top: env(safe-area-inset-top, 0px);
 }
 
-/* Touch Improvements for Mobile */
+/* Mobile App Touch Improvements */
 @media (hover: none) and (pointer: coarse) {
+  /* 최소 터치 영역 */
   button,
   a,
   [role="button"] {
     min-height: 44px;
-    min-width: 44px;
+  }
+
+  /* 터치 피드백 */
+  .active\:scale-95:active {
+    transform: scale(0.95);
+  }
+
+  /* 스크롤 최적화 */
+  .overflow-auto,
+  .overflow-y-auto,
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
   }
 }
 

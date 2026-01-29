@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   // 개발 중 Fast Refresh 개선
   reactStrictMode: true,
 
+  // 모바일 로컬 테스트용 - 외부 접속 허용
+  allowedDevOrigins: ["172.30.1.94"],
+
   typescript: {
     ignoreBuildErrors: true,
   },
