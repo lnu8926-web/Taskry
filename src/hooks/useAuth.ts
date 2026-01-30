@@ -29,21 +29,35 @@ export function useAuth(): UseAuthReturn {
 
   // 사용자 정보 새로고침
   const refreshUser = useCallback(async () => {
+    console.log("refreshUser 시작");
     try {
-      const [currentSession, currentUser] = await Promise.all([
-        authService.getSession(),
-        authService.getUser(),
-      ]);
+      console.log("getSession 호출 전");
+      const currentSession = await authService.getSession();
+      console.log("getSession 완료:", currentSession);
+
+      console.log("getUser 호출 전");
+      const currentUser = await authService.getUser();
+      console.log("getUser 완료:", currentUser);
 
       setSession(currentSession);
       setAuthUser(currentUser);
 
       if (currentUser) {
-        const userData = await userService.getCurrentUser();
-        setUser(userData);
+        // users 테이블 조회 실패해도 authUser는 유지
+        try {
+          const userData = await userService.getCurrentUser();
+          setUser(userData);
+        } catch (userError) {
+          console.warn(
+            "users 테이블 조회 실패 (신규 사용자일 수 있음):",
+            userError,
+          );
+          setUser(null);
+        }
       } else {
         setUser(null);
       }
+      console.log("refreshUser 완료");
     } catch (error) {
       console.error("Failed to refresh user:", error);
       setUser(null);
@@ -54,9 +68,12 @@ export function useAuth(): UseAuthReturn {
 
   // 초기 로드 및 인증 상태 변경 감지
   useEffect(() => {
+    console.log("useAuth useEffect 시작");
     const initAuth = async () => {
+      console.log("initAuth 시작");
       setIsLoading(true);
       await refreshUser();
+      console.log("initAuth 완료, setIsLoading(false) 호출");
       setIsLoading(false);
     };
 

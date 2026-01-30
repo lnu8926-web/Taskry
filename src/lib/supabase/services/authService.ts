@@ -71,13 +71,24 @@ export const authService = {
    */
   async getSession() {
     const supabase = getSupabaseClient();
-    const { data, error } = await supabase.auth.getSession();
-    // 세션이 없는 경우는 정상적인 상황이므로 null 반환
-    if (error) {
-      console.warn("getSession error:", error.message);
+    try {
+      // 3초 타임아웃 추가
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("getSession timeout")), 3000)
+      );
+      const sessionPromise = supabase.auth.getSession();
+      
+      const { data, error } = await Promise.race([sessionPromise, timeoutPromise]) as any;
+      
+      if (error) {
+        console.warn("getSession error:", error.message);
+        return null;
+      }
+      return data.session;
+    } catch (e) {
+      console.warn("getSession 타임아웃 또는 에러:", e);
       return null;
     }
-    return data.session;
   },
 
   /**
@@ -85,17 +96,27 @@ export const authService = {
    */
   async getUser() {
     const supabase = getSupabaseClient();
-    const { data, error } = await supabase.auth.getUser();
-    // AuthSessionMissingError는 로그아웃 상태에서 정상적인 상황
-    if (error) {
-      // 세션 없음 에러는 무시하고 null 반환
-      if (error.name === "AuthSessionMissingError") {
+    try {
+      // 3초 타임아웃 추가
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("getUser timeout")), 3000)
+      );
+      const userPromise = supabase.auth.getUser();
+      
+      const { data, error } = await Promise.race([userPromise, timeoutPromise]) as any;
+      
+      if (error) {
+        if (error.name === "AuthSessionMissingError") {
+          return null;
+        }
+        console.warn("getUser error:", error.message);
         return null;
       }
-      console.warn("getUser error:", error.message);
+      return data.user;
+    } catch (e) {
+      console.warn("getUser 타임아웃 또는 에러:", e);
       return null;
     }
-    return data.user;
   },
 
   /**
