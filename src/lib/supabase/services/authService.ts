@@ -72,7 +72,11 @@ export const authService = {
   async getSession() {
     const supabase = getSupabaseClient();
     const { data, error } = await supabase.auth.getSession();
-    if (error) throw error;
+    // 세션이 없는 경우는 정상적인 상황이므로 null 반환
+    if (error) {
+      console.warn("getSession error:", error.message);
+      return null;
+    }
     return data.session;
   },
 
@@ -82,7 +86,15 @@ export const authService = {
   async getUser() {
     const supabase = getSupabaseClient();
     const { data, error } = await supabase.auth.getUser();
-    if (error) throw error;
+    // AuthSessionMissingError는 로그아웃 상태에서 정상적인 상황
+    if (error) {
+      // 세션 없음 에러는 무시하고 null 반환
+      if (error.name === "AuthSessionMissingError") {
+        return null;
+      }
+      console.warn("getUser error:", error.message);
+      return null;
+    }
     return data.user;
   },
 
