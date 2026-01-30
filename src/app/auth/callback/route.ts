@@ -4,15 +4,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
-import { useAuth } from "@/hooks/useAuth";
-
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/";
-
-  // google oauth 콜백 처리
-  const { signInWithOAuth } = useAuth();
 
   if (code) {
     const supabase = await createClient();
@@ -21,6 +16,8 @@ export async function GET(request: Request) {
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);
     }
+    
+    console.error("OAuth callback error:", error.message);
   }
 
   // 에러 발생 시 로그인 페이지로 리다이렉트
