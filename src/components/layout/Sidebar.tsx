@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import {
   Home,
   FolderKanban,
@@ -145,7 +144,7 @@ function ProjectItem({ color, name }: ProjectItemProps) {
       className="flex items-center w-full px-3 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
     >
       <span
-        className="w-2.5 h-2.5 rounded-full mr-3 flex-shrink-0"
+        className="w-2.5 h-2.5 rounded-full mr-3 shrink-0"
         style={{ backgroundColor: color }}
       />
       <span className="truncate">{name}</span>

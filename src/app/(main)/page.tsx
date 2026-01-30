@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 import { motion } from "framer-motion";
 import {
   PieChart,
@@ -35,6 +36,14 @@ const STATUS_COLORS = {
 
 const Home = () => {
   const router = useRouter();
+  const { user, isLoading: authLoading } = useAuth();
+
+  // 미로그인시 로그인 페이지로 리다이렉트
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push("/login");
+    }
+  }, [user, authLoading, router]);
 
   useEffect(() => {
     initLocalStorage();
@@ -55,16 +64,21 @@ const Home = () => {
   // 도넛 차트 데이터
   const donutData = [
     { name: "할 일", value: taskStats.todo, color: STATUS_COLORS.todo },
-    { name: "진행중", value: taskStats.inprogress, color: STATUS_COLORS.inprogress },
+    {
+      name: "진행중",
+      value: taskStats.inprogress,
+      color: STATUS_COLORS.inprogress,
+    },
     { name: "완료", value: taskStats.done, color: STATUS_COLORS.done },
   ];
 
   // 주간 완료 데이터 (Mock - 실제로는 날짜별 필터링 필요)
   const weeklyData = useMemo(() => {
     const days = ["월", "화", "수", "목", "금", "토", "일"];
+    const mockValues = [2, 3, 1, 5, 4, 2, 1]; // 고정 Mock 데이터
     return days.map((day, i) => ({
       name: day,
-      완료: Math.floor(Math.random() * 5) + (i === 3 ? 3 : 0), // Mock
+      완료: mockValues[i],
     }));
   }, []);
 
@@ -79,6 +93,15 @@ const Home = () => {
   const recentProjects = useMemo(() => {
     return projects.slice(0, 3);
   }, [projects]);
+
+  // 로딩 중이거나 미로그인이면 로딩 표시
+  if (authLoading || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-gray-500">로딩 중...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -177,11 +200,7 @@ const Home = () => {
                 <XAxis dataKey="name" tickLine={false} axisLine={false} />
                 <YAxis hide />
                 <Tooltip />
-                <Bar
-                  dataKey="완료"
-                  fill={MIST.DEFAULT}
-                  radius={[4, 4, 0, 0]}
-                />
+                <Bar dataKey="완료" fill={MIST.DEFAULT} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </motion.div>
@@ -214,7 +233,9 @@ const Home = () => {
                     className="w-2 h-2 rounded-full"
                     style={{
                       backgroundColor:
-                        STATUS_COLORS[task.status as keyof typeof STATUS_COLORS],
+                        STATUS_COLORS[
+                          task.status as keyof typeof STATUS_COLORS
+                        ],
                     }}
                   />
                   <span className="flex-1 text-gray-800">{task.title}</span>
@@ -259,10 +280,10 @@ const Home = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {recentProjects.map((project) => {
                 const projectTasks = tasks.filter(
-                  (t) => t.project_id === project.project_id
+                  (t) => t.project_id === project.project_id,
                 );
                 const doneTasks = projectTasks.filter(
-                  (t) => t.status === "done"
+                  (t) => t.status === "done",
                 ).length;
                 const progress =
                   projectTasks.length > 0
@@ -272,7 +293,9 @@ const Home = () => {
                 return (
                   <div
                     key={project.project_id}
-                    onClick={() => router.push(`/projects/${project.project_id}`)}
+                    onClick={() =>
+                      router.push(`/projects/${project.project_id}`)
+                    }
                     className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-2 mb-2">
@@ -293,7 +316,9 @@ const Home = () => {
                         }}
                       />
                     </div>
-                    <span className="text-xs text-gray-500">{progress}% 완료</span>
+                    <span className="text-xs text-gray-500">
+                      {progress}% 완료
+                    </span>
                   </div>
                 );
               })}
