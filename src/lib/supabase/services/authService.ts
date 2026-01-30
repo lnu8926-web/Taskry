@@ -73,13 +73,16 @@ export const authService = {
     const supabase = getSupabaseClient();
     try {
       // 3초 타임아웃 추가
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("getSession timeout")), 3000)
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("getSession timeout")), 3000),
       );
       const sessionPromise = supabase.auth.getSession();
-      
-      const { data, error } = await Promise.race([sessionPromise, timeoutPromise]) as any;
-      
+
+      const { data, error } = (await Promise.race([
+        sessionPromise,
+        timeoutPromise,
+      ])) as any;
+
       if (error) {
         console.warn("getSession error:", error.message);
         return null;
@@ -98,13 +101,16 @@ export const authService = {
     const supabase = getSupabaseClient();
     try {
       // 3초 타임아웃 추가
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("getUser timeout")), 3000)
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("getUser timeout")), 3000),
       );
       const userPromise = supabase.auth.getUser();
-      
-      const { data, error } = await Promise.race([userPromise, timeoutPromise]) as any;
-      
+
+      const { data, error } = (await Promise.race([
+        userPromise,
+        timeoutPromise,
+      ])) as any;
+
       if (error) {
         if (error.name === "AuthSessionMissingError") {
           return null;
