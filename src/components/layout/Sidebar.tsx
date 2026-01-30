@@ -7,10 +7,12 @@ import {
   Settings,
   Plus,
   Search,
+  LogOut,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { MIST, COMPLEMENTARY } from "@/lib/constants";
+import { useAuth } from "@/hooks/useAuth";
 
 interface SidebarProps {
   className?: string;
@@ -24,6 +26,13 @@ const NAV_ITEMS = [
 
 export default function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { signOut, authUser } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+    router.push("/login");
+  };
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -109,8 +118,8 @@ export default function Sidebar({ className }: SidebarProps) {
         </div>
       </nav>
 
-      {/* 하단: 설정 */}
-      <div className="p-4 border-t border-gray-200">
+      {/* 하단: 설정 및 로그아웃 */}
+      <div className="p-4 border-t border-gray-200 space-y-1">
         <Link
           href="/settings"
           className={`flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors ${
@@ -127,6 +136,16 @@ export default function Sidebar({ className }: SidebarProps) {
           <Settings size={18} className="mr-3" />
           Settings
         </Link>
+        
+        {authUser && (
+          <button
+            onClick={handleLogout}
+            className="flex items-center w-full px-3 py-2.5 text-sm rounded-lg transition-colors text-gray-600 hover:bg-red-50 hover:text-red-600"
+          >
+            <LogOut size={18} className="mr-3" />
+            로그아웃
+          </button>
+        )}
       </div>
     </aside>
   );
