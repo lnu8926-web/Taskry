@@ -86,13 +86,13 @@ html {
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --color-main-100: #EDF1F2;
-  --color-main-200: #C3D1D3;
-  --color-main-300: #879DA0;
-  --color-main-400: #687E81;
-  --color-main-500: #4A5C5E;
-  --color-main-600: #3A4A4C;
-  --color-main-700: #2A3A3C;
+  --color-main-100: #edf1f2;
+  --color-main-200: #c3d1d3;
+  --color-main-300: #879da0;
+  --color-main-400: #687e81;
+  --color-main-500: #4a5c5e;
+  --color-main-600: #3a4a4c;
+  --color-main-700: #2a3a3c;
 
   --color-gray-100: #ebe9e9;
   --color-gray-200: #c5c0c1;
