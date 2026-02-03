@@ -29,15 +29,9 @@ export function useAuth(): UseAuthReturn {
 
   // 사용자 정보 새로고침
   const refreshUser = useCallback(async () => {
-    console.log("refreshUser 시작");
     try {
-      console.log("getSession 호출 전");
       const currentSession = await authService.getSession();
-      console.log("getSession 완료:", currentSession);
-
-      console.log("getUser 호출 전");
       const currentUser = await authService.getUser();
-      console.log("getUser 완료:", currentUser);
 
       setSession(currentSession);
       setAuthUser(currentUser);
@@ -57,7 +51,6 @@ export function useAuth(): UseAuthReturn {
       } else {
         setUser(null);
       }
-      console.log("refreshUser 완료");
     } catch (error) {
       console.error("Failed to refresh user:", error);
       setUser(null);
@@ -68,12 +61,9 @@ export function useAuth(): UseAuthReturn {
 
   // 초기 로드 및 인증 상태 변경 감지
   useEffect(() => {
-    console.log("useAuth useEffect 시작");
     const initAuth = async () => {
-      console.log("initAuth 시작");
       setIsLoading(true);
       await refreshUser();
-      console.log("initAuth 완료, setIsLoading(false) 호출");
       setIsLoading(false);
     };
 
