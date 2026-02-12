@@ -25,97 +25,42 @@ export function useAuth(): UseAuthReturn {
   const [user, setUser] = useState<User | null>(null);
   const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // 사용자 정보 새로고침
+  // 사용자 정보 새로고침 (스킵됨)
   const refreshUser = useCallback(async () => {
-    try {
-      const currentSession = await authService.getSession();
-      const currentUser = await authService.getUser();
-
-      setSession(currentSession);
-      setAuthUser(currentUser);
-
-      if (currentUser) {
-        // users 테이블 조회 실패해도 authUser는 유지
-        try {
-          const userData = await userService.getCurrentUser();
-          setUser(userData);
-        } catch (userError) {
-          console.warn(
-            "users 테이블 조회 실패 (신규 사용자일 수 있음):",
-            userError,
-          );
-          setUser(null);
-        }
-      } else {
-        setUser(null);
-      }
-    } catch (error) {
-      console.error("Failed to refresh user:", error);
-      setUser(null);
-      setAuthUser(null);
-      setSession(null);
-    }
+    // Supabase 통신 스킵 - 개발 환경
+    return;
   }, []);
 
-  // 초기 로드 및 인증 상태 변경 감지
+  // 초기 로드 (스킵됨)
   useEffect(() => {
-    const initAuth = async () => {
-      setIsLoading(true);
-      await refreshUser();
-      setIsLoading(false);
-    };
-
-    initAuth();
-
-    // 인증 상태 변경 리스너
-    const {
-      data: { subscription },
-    } = authService.onAuthStateChange(async (event, session) => {
-      setSession(session as Session | null);
-
-      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
-        await refreshUser();
-      } else if (event === "SIGNED_OUT") {
-        setUser(null);
-        setAuthUser(null);
-        setSession(null);
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    setIsLoading(false);
   }, [refreshUser]);
 
-  // Google 로그인
+  // Google 로그인 (스킵됨)
   const signInWithGoogle = async () => {
-    await authService.signInWithOAuth("google");
+    // 스킵
   };
 
-  // GitHub 로그인
+  // GitHub 로그인 (스킵됨)
   const signInWithGithub = async () => {
-    await authService.signInWithOAuth("github");
+    // 스킵
   };
 
-  // 이메일/비밀번호 로그인
+  // 이메일/비밀번호 로그인 (스킵됨)
   const signIn = async (email: string, password: string) => {
-    await authService.signIn(email, password);
-    await refreshUser();
+    // 스킵
   };
 
-  // 회원가입
+  // 회원가입 (스킵됨)
   const signUp = async (email: string, password: string, userName: string) => {
-    await authService.signUp(email, password, userName);
+    // 스킵
   };
 
-  // 로그아웃
+  // 로그아웃 (스킵됨)
   const signOut = async () => {
-    await authService.signOut();
-    setUser(null);
-    setAuthUser(null);
-    setSession(null);
+    // 스킵
   };
 
   return {

@@ -1,20 +1,9 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, lazy, Suspense, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
 import { motion } from "framer-motion";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import dynamic from "next/dynamic";
 import {
   CheckCircle,
   Clock,
@@ -27,6 +16,29 @@ import { MIST } from "@/lib/constants";
 import { initLocalStorage, getProjects, getTasks } from "@/lib/local";
 import { Project, Task } from "@/types";
 
+// 차트 동적 로드 (Lazy loading)
+const PieChartComponent = dynamic(
+  () => import("recharts").then((mod) => ({ default: mod.PieChart })),
+  { loading: () => <div className="h-[180px]">로딩중...</div> }
+);
+
+const BarChartComponent = dynamic(
+  () => import("recharts").then((mod) => ({ default: mod.BarChart })),
+  { loading: () => <div className="h-[180px]">로딩중...</div> }
+);
+
+const {
+  PieChart,
+  Pie,
+  Cell,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  Tooltip,
+} = require("recharts");
+
 // 상태별 컬러
 const STATUS_COLORS = {
   todo: "#FBBF24", // yellow
@@ -36,24 +48,18 @@ const STATUS_COLORS = {
 
 const Home = () => {
   const router = useRouter();
-  const { user, isLoading: authLoading } = useAuth();
-
-  // 미로그인시 로그인 페이지로 리다이렉트
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push("/login");
-    }
-  }, [user, authLoading, router]);
+  const [mounted, setMounted] = useState(false);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
     initLocalStorage();
+    setProjects(getProjects());
+    setTasks(getTasks());
+    setMounted(true);
   }, []);
 
   // 데이터 로드
-  const projects = useMemo<Project[]>(() => getProjects(), []);
-  const tasks = useMemo<Task[]>(() => getTasks(), []);
-
-  // 태스크 상태별 카운트
   const taskStats = useMemo(() => {
     const todo = tasks.filter((t) => t.status === "todo").length;
     const inprogress = tasks.filter((t) => t.status === "inprogress").length;
@@ -94,13 +100,9 @@ const Home = () => {
     return projects.slice(0, 3);
   }, [projects]);
 
-  // 로딩 중이거나 미로그인이면 로딩 표시
-  if (authLoading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-gray-500">로딩 중...</div>
-      </div>
-    );
+  // Hydration 오류 방지: 마운트 전에는 아무것도 렌더링하지 않음
+  if (!mounted) {
+    return null;
   }
 
   return (
@@ -142,8 +144,9 @@ const Home = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* 도넛 차트 */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
             className="bg-white rounded-2xl p-5 shadow-sm"
           >
             <h3 className="font-semibold text-gray-800 mb-4">태스크 상태</h3>
@@ -189,9 +192,9 @@ const Home = () => {
 
           {/* 바 차트 */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.05 }}
             className="bg-white rounded-2xl p-5 shadow-sm"
           >
             <h3 className="font-semibold text-gray-800 mb-4">주간 완료 현황</h3>
@@ -208,9 +211,9 @@ const Home = () => {
 
         {/* 오늘 할 일 */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
           className="bg-white rounded-2xl p-5 shadow-sm"
         >
           <div className="flex items-center justify-between mb-4">
@@ -257,9 +260,9 @@ const Home = () => {
 
         {/* 최근 프로젝트 */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.15 }}
           className="bg-white rounded-2xl p-5 shadow-sm"
         >
           <div className="flex items-center justify-between mb-4">
